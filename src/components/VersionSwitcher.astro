@@ -1,7 +1,7 @@
 ---
 /**
  * Review-only control for comparing the design directions.
- * Each version has its own pages (Version B lives under /clay/; the A2 homepage concept at /sage-2/).
+ * Each version has its own pages (Version B lives under /clay/).
  * Remove this component (and site.flags.previewSwitcher) once a direction is chosen.
  */
 interface Props {
@@ -95,10 +95,6 @@ const { items, current } = Astro.props;
 
   .swatch--sage {
     background: linear-gradient(135deg, #a7ae96 50%, #55634a 50%);
-  }
-
-  .swatch--a2 {
-    background: radial-gradient(circle at 50% 50%, #f6f2ea 30%, #a3ae9e 31%, #a3ae9e 45%, #55634a 46%);
   }
 
   .swatch--clay {

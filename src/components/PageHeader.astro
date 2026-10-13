@@ -1,6 +1,7 @@
 ---
 /** Interior page intro: eyebrow, title, lede, and an optional photo. */
-import Photo from './Photo.astro';
+import ArchFrame from './ArchFrame.astro';
+import Sprig from './Sprig.astro';
 import { rich } from '../lib/utils';
 
 interface Props {
@@ -24,19 +25,12 @@ const { eyebrow, title, lede, image, stock } = Astro.props;
     {
       image && (
         <div class="page-header__media" data-reveal style="--reveal-delay: .15s">
-          <Photo src={image.src} alt={image.alt} label={image.label} shape="feature" aspect="4 / 5" eager stock={stock} sizes="(min-width: 900px) 40vw, 100vw" />
+          <ArchFrame src={image.src} alt={image.alt} label={image.label} aspect="4 / 5" eager stock={stock} sizes="(min-width: 900px) 40vw, 100vw" outline="left" sprig="left" />
         </div>
       )
     }
   </div>
-  <svg class="page-header__sprig" viewBox="0 0 200 300" aria-hidden="true">
-    <path d="M100 295C98 220 100 140 120 20" />
-    <path d="M101 250c-18-8-34-26-38-48 22 4 36 22 38 48Z" />
-    <path d="M103 205c16-10 30-28 32-50-20 6-32 24-32 50Z" />
-    <path d="M106 160c-16-8-28-24-30-44 20 4 30 20 30 44Z" />
-    <path d="M110 118c14-10 24-26 24-44-18 6-26 22-24 44Z" />
-    <path d="M114 78c-12-6-20-20-20-34 14 4 22 16 20 34Z" />
-  </svg>
+  {!image && <Sprig kind="olive" bend={0.4} leaves={10} class="page-header__sprig" />}
 </section>
 
 <style>
@@ -88,24 +82,15 @@ const { eyebrow, title, lede, image, stock } = Astro.props;
     }
   }
 
-  .page-header__sprig {
+  .page-header :global(.page-header__sprig) {
     position: absolute;
-    right: -2rem;
+    right: clamp(-1rem, 2vw, 3rem);
     top: 2rem;
-    width: clamp(9rem, 18vw, 15rem);
-    fill: none;
-    stroke: var(--accent-soft);
-    stroke-width: 1.2;
-    opacity: 0.7;
+    width: clamp(5rem, 9vw, 8rem);
+    height: auto;
+    color: var(--accent-soft);
+    transform: rotate(10deg);
     pointer-events: none;
-  }
-
-  .page-header--image .page-header__sprig {
-    left: -3rem;
-    right: auto;
-    top: auto;
-    bottom: -2rem;
-    transform: scaleX(-1) rotate(-10deg);
   }
 
   @media (min-width: 900px) {

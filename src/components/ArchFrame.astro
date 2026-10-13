@@ -1,0 +1,78 @@
+---
+/**
+ * An arched photo with a fine offset outline that echoes its shape, plus an optional
+ * olive stem drawn over one edge. Takes the same photo props as <Photo>.
+ */
+import Photo from './Photo.astro';
+import Sprig from './Sprig.astro';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  label?: string;
+  aspect?: string;
+  sizes?: string;
+  eager?: boolean;
+  position?: string;
+  stock?: boolean;
+  /** Which way the outline is offset (it always sits slightly above the photo). */
+  outline?: 'left' | 'right';
+  /** Which edge the olive stem grows over; false for none. */
+  sprig?: 'left' | 'right' | false;
+  class?: string;
+}
+
+const { outline = 'right', sprig = 'left', class: className = '', ...photo } = Astro.props;
+---
+
+<div class:list={['arch-frame', `arch-frame--outline-${outline}`, sprig && `arch-frame--sprig-${sprig}`, className]}>
+  <span class="arch-frame__outline" aria-hidden="true"></span>
+  {sprig && <Sprig kind="olive" bend={sprig === 'left' ? -0.55 : 0.55} leaves={11} class="arch-frame__sprig" />}
+  <Photo {...photo} shape="feature" />
+</div>
+
+<style>
+  .arch-frame {
+    position: relative;
+    --offset: clamp(8px, 1.2vw, 16px);
+  }
+
+  .arch-frame__outline {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 1px solid var(--accent-soft);
+    border-radius: var(--radius-feature);
+    transform: translate(var(--offset), calc(-1 * var(--offset)));
+    pointer-events: none;
+  }
+
+  .arch-frame--outline-left .arch-frame__outline {
+    transform: translate(calc(-1 * var(--offset)), calc(-1 * var(--offset)));
+  }
+
+  .arch-frame :global(.photo) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .arch-frame :global(.arch-frame__sprig) {
+    position: absolute;
+    z-index: 2;
+    bottom: -9%;
+    width: clamp(5.5rem, 30%, 10rem);
+    height: auto;
+    color: var(--accent);
+    pointer-events: none;
+  }
+
+  .arch-frame--sprig-left :global(.arch-frame__sprig) {
+    left: -14%;
+    transform: rotate(-12deg);
+  }
+
+  .arch-frame--sprig-right :global(.arch-frame__sprig) {
+    right: -14%;
+    transform: rotate(12deg);
+  }
+</style>

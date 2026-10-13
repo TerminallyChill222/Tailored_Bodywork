@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Photo from '../components/Photo.astro';
+import ArchFrame from '../components/ArchFrame.astro';
 import Icon from '../components/Icon.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { site } from '../data/site';
@@ -126,7 +127,7 @@ import { rich, url } from '../lib/utils';
   <section class="section section--alt" aria-labelledby="personal-title">
     <div class="container personal">
       <div class="personal__media" data-reveal>
-        <Photo src={practitioner.casual.src} alt={practitioner.casual.alt} label={practitioner.casual.label} shape="feature" aspect="4 / 5" stock={false} sizes="(min-width: 900px) 30vw, 100vw" />
+        <ArchFrame src={practitioner.casual.src} alt={practitioner.casual.alt} label={practitioner.casual.label} aspect="4 / 5" stock={false} sizes="(min-width: 900px) 30vw, 100vw" outline="left" sprig={false} />
       </div>
       <div class="personal__text" data-reveal style="--reveal-delay: .1s">
         <p class="eyebrow">Outside the session</p>

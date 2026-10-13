@@ -7,6 +7,8 @@ import ServiceCard from '../components/ServiceCard.astro';
 import Steps from '../components/Steps.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CtaBand from '../components/CtaBand.astro';
+import ArchFrame from '../components/ArchFrame.astro';
+import Sprig from '../components/Sprig.astro';
 import { site } from '../data/site';
 import { services } from '../data/services';
 import { intro } from '../data/about';
@@ -46,7 +48,7 @@ const benefits = [
 const details = [
   { caption: 'Fresh linens, every visit', ...scenes.sage.towel },
   { caption: 'Thoughtful details', ...images.supplies },
-  { caption: 'Quiet, unhurried care', ...images.eucalyptus },
+  { caption: 'Quiet, unhurried care', ...scenes.sage.oliveVase },
   { caption: 'Your space, prepared', ...scenes.sage.corner },
 ];
 
@@ -80,14 +82,15 @@ const assurances = [
         </p>
       </div>
       <div class="hero__media" data-reveal style="--reveal-delay: .15s">
-        <Photo
+        <ArchFrame
           src={scenes.sage.room.src}
           alt={scenes.sage.room.alt}
-          shape="feature"
           aspect="4 / 5"
           eager
           position="52% center"
           sizes="(min-width: 900px) 45vw, 100vw"
+          outline="right"
+          sprig="left"
         />
         <div class="hero__float" aria-hidden="true">
           <span class="icon-badge"><Icon name="table" /></span>
@@ -95,14 +98,7 @@ const assurances = [
         </div>
       </div>
     </div>
-    <svg class="hero__sprig" viewBox="0 0 200 300" aria-hidden="true">
-      <path d="M100 295C98 220 100 140 120 20" />
-      <path d="M101 250c-18-8-34-26-38-48 22 4 36 22 38 48Z" />
-      <path d="M103 205c16-10 30-28 32-50-20 6-32 24-32 50Z" />
-      <path d="M106 160c-16-8-28-24-30-44 20 4 30 20 30 44Z" />
-      <path d="M110 118c14-10 24-26 24-44-18 6-26 22-24 44Z" />
-      <path d="M114 78c-12-6-20-20-20-34 14 4 22 16 20 34Z" />
-    </svg>
+    <Sprig kind="olive" bend={0.35} leaves={10} class="hero__sprig" />
   </section>
 
   <!-- Trust strip -->
@@ -167,14 +163,15 @@ const assurances = [
   <section class="section section--alt meet" aria-labelledby="meet-title">
     <div class="container meet__grid">
       <div class="meet__media" data-reveal>
-        <Photo
+        <ArchFrame
           src={practitioner.headshot.src}
           alt={practitioner.headshot.alt}
           label={practitioner.headshot.label}
-          shape="feature"
           aspect="4 / 5"
           sizes="(min-width: 900px) 40vw, 100vw"
           stock={false}
+          outline="right"
+          sprig="right"
         />
       </div>
       <div class="meet__text" data-reveal style="--reveal-delay: .12s">
@@ -235,7 +232,7 @@ const assurances = [
       <div class="experience-teaser__media" data-reveal>
         <Photo src={scenes.sage.oliveLinens.src} alt={scenes.sage.oliveLinens.alt} position="86% center" aspect="5 / 6" sizes="(min-width: 900px) 45vw, 100vw" />
         <div class="experience-teaser__inset">
-          <Photo src={scenes.sage.towelDetail.src} alt={scenes.sage.towelDetail.alt} position="35% 40%" aspect="1 / 1" sizes="200px" shape="circle" stock={false} />
+          <Photo src={scenes.sage.benchDetail.src} alt={scenes.sage.benchDetail.alt} position="45% 40%" aspect="1 / 1" sizes="200px" shape="circle" stock={false} />
         </div>
       </div>
       <div class="experience-teaser__text" data-reveal style="--reveal-delay: .12s">
@@ -354,14 +351,14 @@ const assurances = [
     }
 
     .hero__float {
-      left: 0.75rem;
+      right: 0.75rem;
       bottom: 1rem;
     }
   }
 
   .hero__float {
     position: absolute;
-    left: -1rem;
+    right: -1rem;
     bottom: 2.5rem;
     display: flex;
     align-items: center;
@@ -374,7 +371,7 @@ const assurances = [
     box-shadow: var(--shadow-soft);
     font-size: 0.85rem;
     line-height: 1.35;
-    z-index: 3;
+    z-index: 4;
   }
 
   .hero__float .icon-badge {
@@ -387,16 +384,14 @@ const assurances = [
     height: 1.35rem;
   }
 
-  .hero__sprig {
+  .hero :global(.hero__sprig) {
     position: absolute;
-    left: -3rem;
-    bottom: -3rem;
-    width: clamp(10rem, 20vw, 17rem);
-    fill: none;
-    stroke: var(--accent-soft);
-    stroke-width: 1.1;
-    opacity: 0.55;
-    transform: rotate(-14deg);
+    left: -2rem;
+    bottom: -2.5rem;
+    width: clamp(5rem, 9vw, 8rem);
+    height: auto;
+    color: var(--accent-soft);
+    transform: rotate(-16deg);
     pointer-events: none;
   }
 
@@ -411,7 +406,7 @@ const assurances = [
     }
 
     .hero__float {
-      left: -3rem;
+      right: -2.5rem;
     }
   }
 
@@ -534,6 +529,10 @@ const assurances = [
   }
 
   /* ---------- Meet ---------- */
+  .meet {
+    overflow-x: clip;
+  }
+
   .meet__grid {
     display: grid;
     gap: 3rem;

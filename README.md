@@ -19,8 +19,6 @@ The draft contains two fully separate designs. They share all content (`src/data
 
 The **Preview** pill at the bottom of every page jumps to the same page in the other version. Old `?v=clay` links redirect automatically.
 
-There's also **A2 · Line art** (`/sage-2/`), an alternate Sage homepage. It has a centered editorial hero with three arched photos, offset outline arches, fine-line botanical drawings (`src/components/Sprig.astro`), ornamental dividers (`Ornament.astro`), a wavy "How it works" thread, and a hand-drawn underline. It appears in the Preview pill on homepages. If Torey prefers it, those elements can be carried through the rest of the Sage pages.
-
 Where things live:
 
 - Version A: `src/pages/*.astro`, `src/components/*.astro`
