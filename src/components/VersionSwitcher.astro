@@ -1,33 +1,27 @@
 ---
 /**
- * Review-only control for comparing the two design directions.
- * Each version has its own pages (Version B lives under /clay/); this jumps to the same page in the other version.
+ * Review-only control for comparing the design directions.
+ * Each version has its own pages (Version B lives under /clay/; the A2 homepage concept at /sage-2/).
  * Remove this component (and site.flags.previewSwitcher) once a direction is chosen.
  */
-import type { Version } from '../lib/utils';
-
 interface Props {
-  current: Version;
-  otherHref: string;
+  items: { id: string; label: string; href: string }[];
+  current: string;
 }
-const { current, otherHref } = Astro.props;
-const versions: { id: Version; label: string }[] = [
-  { id: 'sage', label: 'A · Sage' },
-  { id: 'clay', label: 'B · Clay' },
-];
+const { items, current } = Astro.props;
 ---
 
 <nav class="version-switcher" aria-label="Design version">
   <span class="version-switcher__label">Preview</span>
   {
-    versions.map((v) =>
+    items.map((v) =>
       v.id === current ? (
         <span class="version-switcher__item is-current" aria-current="page">
           <span class={`swatch swatch--${v.id}`} aria-hidden="true" />
           {v.label}
         </span>
       ) : (
-        <a class="version-switcher__item" href={otherHref}>
+        <a class="version-switcher__item" href={v.href}>
           <span class={`swatch swatch--${v.id}`} aria-hidden="true" />
           {v.label}
         </a>
@@ -101,6 +95,10 @@ const versions: { id: Version; label: string }[] = [
 
   .swatch--sage {
     background: linear-gradient(135deg, #a7ae96 50%, #55634a 50%);
+  }
+
+  .swatch--a2 {
+    background: radial-gradient(circle at 50% 50%, #f6f2ea 30%, #a3ae9e 31%, #a3ae9e 45%, #55634a 46%);
   }
 
   .swatch--clay {

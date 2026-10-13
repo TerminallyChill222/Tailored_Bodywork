@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import Sprig from './Sprig.astro';
 import { site } from '../data/site';
 import { rich, bookingHref } from '../lib/utils';
 
@@ -7,11 +8,14 @@ interface Props {
   eyebrow?: string;
   title?: string;
   body?: string;
+  /** Frame the band with fine-line olive branches. */
+  ornate?: boolean;
 }
 const {
   eyebrow = 'Whenever you’re ready',
   title = 'An hour that’s entirely *yours*.',
   body = 'Call, text, or email to book — or just to ask a question first. There’s no such thing as too small a question.',
+  ornate = false,
 } = Astro.props;
 ---
 
@@ -23,6 +27,8 @@ const {
         <path d="M50 200a150 150 0 0 1 300 0" stroke-dasharray="2 6" />
         <path d="M90 200a110 110 0 0 1 220 0" />
       </svg>
+      {ornate && <Sprig kind="olive" bend={0.45} leaves={10} class="cta-band__branch cta-band__branch--l" />}
+      {ornate && <Sprig kind="eucalyptus" bend={-0.4} leaves={7} class="cta-band__branch cta-band__branch--r" />}
       <p class="eyebrow eyebrow--center">{eyebrow}</p>
       <h2 id="cta-title" set:html={rich(title)} />
       <p class="lede" set:html={rich(body)} />
@@ -79,6 +85,26 @@ const {
   .cta-band .btn-row {
     justify-content: center;
     margin-top: 0.75rem;
+  }
+
+  .cta-band__inner :global(.cta-band__branch) {
+    position: absolute;
+    bottom: -1.5rem;
+    width: clamp(5rem, 11vw, 9rem);
+    height: auto;
+    color: var(--band-soft);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .cta-band__inner :global(.cta-band__branch--l) {
+    left: clamp(0.5rem, 3vw, 3rem);
+    transform: rotate(-8deg);
+  }
+
+  .cta-band__inner :global(.cta-band__branch--r) {
+    right: clamp(0.5rem, 3vw, 3rem);
+    transform: rotate(10deg);
   }
 
   .cta-band__arc {

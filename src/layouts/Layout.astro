@@ -7,7 +7,7 @@ import HeaderClay from '../components/clay/HeaderClay.astro';
 import FooterClay from '../components/clay/FooterClay.astro';
 import VersionSwitcher from '../components/VersionSwitcher.astro';
 import { site } from '../data/site';
-import { url, plain, counterpart, imgSrc, type Version } from '../lib/utils';
+import { url, plain, counterpart, imgSrc, isHomePath, type Version } from '../lib/utils';
 
 interface Props {
   title?: string;
@@ -15,9 +15,11 @@ interface Props {
   image?: string;
   /** Which design direction this page belongs to. */
   version?: Version;
+  /** Alternate homepage concept being previewed (A2 · Line art). */
+  variant?: 'a2';
 }
 
-const { title, description = site.description, image, version = 'sage' } = Astro.props;
+const { title, description = site.description, image, version = 'sage', variant } = Astro.props;
 const fullTitle = title
   ? `${title} | ${site.name} — Mobile Bodywork in ${site.city}`
   : `${site.name} | Mobile, In-Home Bodywork in ${site.city}, ${site.regionCode}`;
@@ -27,6 +29,12 @@ const ogImage = ogSrc?.startsWith('http') ? ogSrc : ogSrc && Astro.site ? new UR
 const { draft, previewSwitcher, structuredData } = site.flags;
 const otherVersion: Version = version === 'sage' ? 'clay' : 'sage';
 const otherHref = counterpart(Astro.url.pathname, otherVersion);
+const switcherItems = [
+  { id: 'sage', label: 'A · Sage', href: counterpart(Astro.url.pathname, 'sage') },
+  ...(isHomePath(Astro.url.pathname) ? [{ id: 'a2', label: 'A2 · Line art', href: url('sage-2/') }] : []),
+  { id: 'clay', label: 'B · Clay', href: counterpart(Astro.url.pathname, 'clay') },
+];
+const switcherCurrent = variant ?? version;
 
 // Only emitted once site.flags.structuredData is on and details are verified.
 const schema = {
@@ -89,7 +97,7 @@ const themeColor: Record<Version, string> = { sage: '#f6f2ea', clay: '#f3eee7' }
       <slot />
     </main>
     {version === 'clay' ? <FooterClay /> : <Footer />}
-    {previewSwitcher && <VersionSwitcher current={version} otherHref={otherHref} />}
+    {previewSwitcher && <VersionSwitcher items={switcherItems} current={switcherCurrent} />}
 
     <script>
       const els = document.querySelectorAll<HTMLElement>('[data-reveal]');

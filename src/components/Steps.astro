@@ -2,9 +2,15 @@
 import Icon from './Icon.astro';
 import { steps } from '../data/experience';
 import { rich } from '../lib/utils';
+
+interface Props {
+  /** Connect the steps with a wavy dashed "thread" instead of a straight line. */
+  wave?: boolean;
+}
+const { wave = false } = Astro.props;
 ---
 
-<ol class="steps" role="list">
+<ol class:list={['steps', { 'steps--wave': wave }]} role="list">
   {
     steps.map((step, i) => (
       <li class="step" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
@@ -94,5 +100,29 @@ import { rich } from '../lib/utils';
       padding-inline: 0.5rem;
       margin-left: -0.5rem;
     }
+
+    .steps--wave::before {
+      display: none;
+    }
+
+    /* Wavy dashed thread behind the step icons */
+    .steps--wave {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 60' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C 80 4, 160 4, 250 30 S 420 56, 500 30 S 660 4, 750 30 S 920 56, 1000 30' fill='none' stroke='%23bdb3a2' stroke-width='1.5' stroke-dasharray='5 6' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-size: calc(100% - 4rem) 3.75rem;
+      background-position: 1.9rem 0;
+    }
+
+    .steps--wave :global(.icon-badge) {
+      position: relative;
+      z-index: 1;
+      outline: 1px dashed var(--line-strong);
+      outline-offset: 5px;
+    }
+
+    .steps--wave .step__num {
+      background: none !important;
+    }
   }
+
 </style>

@@ -42,9 +42,16 @@ export function mailtoHref(): string {
 export function counterpart(pathname: string, to: Version): string {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   let rest = pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
-  rest = rest.replace(/^\/+/, '').replace(/^clay(\/|$)/, '');
+  rest = rest.replace(/^\/+/, '').replace(/^(clay|sage-2)(\/|$)/, '');
   if (/^404(\.html)?\/?$/.test(rest)) rest = ''; // there's one shared 404 page
   return vurl(to, rest);
+}
+
+/** True when the path is a version's homepage (/, /clay/, /sage-2/). */
+export function isHomePath(pathname: string): boolean {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const rest = (pathname.startsWith(base) ? pathname.slice(base.length) : pathname).replace(/^\/+|\/+$/g, '');
+  return rest === '' || rest === 'clay' || rest === 'sage-2';
 }
 
 /**
