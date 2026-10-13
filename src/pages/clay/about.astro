@@ -11,8 +11,8 @@ import { rich, vurl, pad } from '../../lib/utils';
 
 <Layout
   version="clay"
-  title={`About ${site.practitioner.firstName}`}
-  description={`Meet ${site.practitioner.firstName}, the practitioner behind Tailored Bodywork — personalized, professional in-home bodywork in ${site.city}.`}
+  title={`About ${site.practitioner.fullName}`}
+  description={`Meet ${site.practitioner.fullName}, the practitioner behind Tailored Bodywork — personalized, professional in-home bodywork in ${site.city}.`}
 >
   <!-- Hero: oversized name, portrait overlapping (after the "Meet Aurora" inspo) -->
   <section class="section--stone meet-hero" aria-labelledby="about-title">
@@ -28,7 +28,7 @@ import { rich, vurl, pad } from '../../lib/utils';
           <Photo src={practitioner.headshot.src} alt={practitioner.headshot.alt} label={practitioner.headshot.label} shape="rect" aspect="4 / 5" stock={false} eager sizes="(min-width: 900px) 30vw, 80vw" />
         </div>
         <div class="meet-hero__text" data-reveal style="--reveal-delay:.15s">
-          <p class="index">( About )</p>
+          <p class="index">( {site.practitioner.fullName} )</p>
           <p class="meet-hero__lede">I’m the person who’ll arrive at your door — here’s a little about my background, how I work, and why I bring bodywork home.</p>
           <ul role="list" class="meet-hero__facts">
             {intro.highlights.map((h) => <li set:html={rich(h)} />)}

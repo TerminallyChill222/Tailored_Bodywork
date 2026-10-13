@@ -17,7 +17,7 @@ The draft contains two fully separate designs. They share all content (`src/data
 | Signature pieces | Arches, pill buttons, botanical line art, icon cards | Facts band, "( 01 )" section indexes, editorial services list, vertical-caption photo strips, "Meet Torey" oversized title, overlapping value circles, accordion menu with dotted price leaders, category tabs on the FAQ |
 | Inspiration | Calm Within, Healing Hub, Serene | Ritualize, Yoga Club, Indigo, Santé, Meet Aurora, "About Massage" |
 
-The **Preview** pill at the bottom of every page jumps to the same page in the other version. Old `?v=clay` links redirect automatically.
+On the local preview (`npm run dev`), the **Preview** pill at the bottom of every page jumps to the same page in the other version. The published site hides the pill, so each version can be shared as its own link. Old `?v=clay` links redirect automatically.
 
 Where things live:
 

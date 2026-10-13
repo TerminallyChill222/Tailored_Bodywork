@@ -19,7 +19,8 @@ export const site = {
 
   practitioner: {
     firstName: 'Torey',
-    fullName: 'Torey [[Last name]]',
+    lastName: 'Brenco',
+    fullName: 'Torey Brenco',
     role: 'Bodywork practitioner',
     // Only use "Licensed Massage Therapist" once Colorado (DORA) licensing is confirmed.
     credentialLine: '[[Licensed Massage Therapist · Colorado license #000000]]',
@@ -66,8 +67,11 @@ export const site = {
   flags: {
     /** Shows placeholder highlights and adds noindex so the draft isn't picked up by search engines. */
     draft: true,
-    /** Floating Version A / Version B link for comparing the two design directions (Version B lives at /clay/). */
-    previewSwitcher: true,
+    /**
+     * Floating Version A / Version B toggle for comparing the two designs (Version B lives at /clay/).
+     * Shown only on the local preview (npm run dev), never on the published site.
+     */
+    previewSwitcher: import.meta.env.DEV,
     /** Emit LocalBusiness structured data. Turn on only after details are verified. */
     structuredData: false,
   },
