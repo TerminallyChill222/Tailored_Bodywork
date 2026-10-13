@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { images } from '../data/images';
+import { faqGroups } from '../data/faq';
+import { rich, plain } from '../lib/utils';
+
+// FAQ structured data — only emitted once answers are confirmed (site.flags.structuredData).
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqGroups.flatMap((g) =>
+    g.items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: plain(item.a) },
+    })),
+  ),
+};
+---
+
+<Layout
+  title="FAQ"
+  description={`Answers to common questions about in-home bodywork in ${site.city}: preparing your space, draping, pressure, booking, travel, and health & safety.`}
+>
+  <PageHeader
+    eyebrow="Frequently asked questions"
+    title="Questions, *answered*"
+    lede="Everything from how much space you need to how draping works. If your question isn’t here, just ask — I’m happy to help."
+    image={images.morning}
+  >
+    <nav aria-label="FAQ categories">
+      <ul role="list" class="chips faq-jump">
+        {
+          faqGroups.map((g) => (
+            <li>
+              <a class="chip" href={`#${g.id}`}>{g.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </PageHeader>
+
+  <section class="section section--tight" aria-label="Questions by category">
+    <div class="container faq">
+      {
+        faqGroups.map((group, gi) => (
+          <section class="faq__group" id={group.id} aria-labelledby={`${group.id}-title`}>
+            <div class="faq__head" data-reveal>
+              <p class="faq__num">{String(gi + 1).padStart(2, '0')}</p>
+              <h2 id={`${group.id}-title`} class="h3">{group.title}</h2>
+            </div>
+            <div class="faq__items" data-reveal style="--reveal-delay: .08s">
+              {group.items.map((item) => (
+                <details class="faq__item">
+                  <summary>
+                    <span class="faq__q">{item.q}</span>
+                    <span class="faq__icon" aria-hidden="true">
+                      <Icon name="plus" />
+                    </span>
+                  </summary>
+                  <div class="faq__a">
+                    {item.draft && <p><span class="draft-tag">Draft answer</span></p>}
+                    <p set:html={rich(item.a)} />
+                  </div>
+                </details>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  {site.flags.structuredData && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+
+  <CtaBand eyebrow="Still curious?" title="Ask me *anything*." body="Send a message with your question — or anything that would help you feel comfortable booking. I’ll get back to you personally." />
+</Layout>
+
+<style>
+  .faq-jump {
+    margin-top: 0.5rem;
+  }
+
+  .faq-jump a {
+    text-decoration: none;
+    transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+  }
+
+  .faq-jump a:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .faq {
+    display: grid;
+    gap: clamp(3.5rem, 3rem + 3vw, 6rem);
+  }
+
+  .faq__group {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .faq__head {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .faq__num {
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-style: italic;
+    font-size: calc(1.3rem * var(--display-scale));
+    color: var(--emphasis);
+  }
+
+  .faq__items {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.35rem 0;
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.25s ease;
+  }
+
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__item summary:hover .faq__q {
+    color: var(--accent);
+  }
+
+  .faq__q {
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-weight: var(--display-weight);
+    font-size: calc(clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem) * var(--display-scale));
+    line-height: 1.35;
+    transition: color 0.25s ease;
+  }
+
+  .faq__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-btn);
+    border: 1px solid var(--line-strong);
+    color: var(--accent);
+    transition: background-color 0.25s ease;
+  }
+
+  .faq__icon :global(.icon) {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: 1.6;
+    transition: transform 0.35s ease;
+  }
+
+  .faq__item[open] .faq__icon {
+    background: var(--accent-wash);
+  }
+
+  .faq__item[open] .faq__icon :global(.icon) {
+    transform: rotate(45deg);
+  }
+
+  .faq__a {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0 3.5rem 1.6rem 0;
+    color: var(--ink-soft);
+    max-width: 44rem;
+  }
+
+  .faq__item[open] .faq__a {
+    animation: faq-in 0.4s ease;
+  }
+
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .faq__group {
+      grid-template-columns: 18rem 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    .faq__head {
+      position: sticky;
+      top: 7rem;
+      align-self: start;
+    }
+  }
+</style>

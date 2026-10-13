@@ -1,0 +1,317 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../data/site';
+import { images } from '../../data/images';
+import { rich, vurl, mailtoHref } from '../../lib/utils';
+
+const ways = [
+  { label: 'Call', value: site.contact.phone, href: site.contact.phoneHref },
+  { label: 'Text', value: site.contact.phone, href: site.contact.smsHref },
+  { label: 'Email', value: site.contact.email, href: mailtoHref() },
+];
+
+const include = [
+  'The service and length you’d like',
+  'Your neighborhood or ZIP',
+  'A few days and times that work',
+  'Anything I should know beforehand',
+];
+---
+
+<Layout
+  version="clay"
+  title="Contact & Booking"
+  description={`Book an in-home bodywork session in ${site.city} by phone, text, or email. Serving ${site.serviceArea.summary}.`}
+>
+  <!-- Split header: intro + photo -->
+  <section class="ct-hero" aria-labelledby="ct-title">
+    <div class="ct-hero__text">
+      <p class="index" data-reveal>( Contact & booking )</p>
+      <h1 id="ct-title" data-reveal style="--reveal-delay:.06s">Book a <em>session</em></h1>
+      <p class="lede" data-reveal style="--reveal-delay:.12s">
+        Booking is personal — call, text, or email, and I’ll find a time that fits your schedule. Questions are always
+        welcome, too, especially before your first session.
+      </p>
+      <a class="btn btn--primary" href="#book" data-reveal style="--reveal-delay:.16s">How to book</a>
+      <dl class="ct-details" data-reveal style="--reveal-delay:.2s">
+        <div>
+          <dt><Icon name="pin" /> Service area</dt>
+          <dd>{site.serviceArea.summary} · <a href={vurl('clay', 'faq#booking')}>details</a></dd>
+        </div>
+        <div>
+          <dt><Icon name="clock" /> Availability</dt>
+          <dd>
+            {site.hours.map((h) => <span class="ct-hours"><span>{h.days}</span> <span set:html={rich(h.time)} /></span>)}
+          </dd>
+        </div>
+      </dl>
+    </div>
+    <div class="ct-hero__media">
+      <Photo src={images.terracotta.src} alt={images.terracotta.alt} shape="rect" aspect="auto" eager sizes="(min-width: 1000px) 45vw, 100vw" />
+    </div>
+  </section>
+
+  <!-- How to book -->
+  <section class="section section--band book" id="book" aria-labelledby="book-title">
+    <div class="container book__grid">
+      <div class="book__intro" data-reveal>
+        <p class="index">( 01 ) — How to book</p>
+        <h2 id="book-title">Call, text, <em>or email</em></h2>
+        <p class="book__lede" set:html={rich('There’s no online calendar — every appointment is arranged with me directly. I’ll reply personally, usually within [[one business day]].')} />
+      </div>
+
+      <div class="book__extra" data-reveal style="--reveal-delay:.15s">
+        <div class="book__include">
+          <p class="book__include-title">Helpful to include</p>
+          <ul role="list">
+            {include.map((i) => <li><Icon name="check" /> {i}</li>)}
+          </ul>
+        </div>
+        <p class="book__privacy">Please don’t include health or medical details in a text or email — we’ll cover anything relevant on your intake form.</p>
+      </div>
+
+      <ul role="list" class="ways" data-reveal style="--reveal-delay:.1s">
+        {
+          ways.map((w) => (
+            <li>
+              <a href={w.href}>
+                <span class="ways__label">{w.label}</span>
+                <span class="ways__value" set:html={rich(`[[${w.value}]]`)} />
+                <Icon name="arrow" class="ways__arrow" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Split hero */
+  .ct-hero {
+    display: grid;
+  }
+
+  .ct-hero__text {
+    display: grid;
+    gap: 1.4rem;
+    align-content: center;
+    justify-items: start;
+    padding: clamp(3rem, 2rem + 4vw, 6rem) clamp(1.25rem, 5vw, 5rem);
+  }
+
+  .ct-hero__media :global(.photo__frame) {
+    aspect-ratio: 4 / 3;
+  }
+
+  .ct-details {
+    display: grid;
+    width: 100%;
+    margin: 0.5rem 0 0;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .ct-details > div {
+    display: grid;
+    gap: 0.25rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ct-details dt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .ct-details dt :global(.icon) {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .ct-details dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+  }
+
+  .ct-details a {
+    color: var(--accent);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+  }
+
+  .ct-hours {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 22rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 1000px) {
+    .ct-hero {
+      grid-template-columns: 1.1fr 0.9fr;
+      min-height: min(90vh, 56rem);
+    }
+
+    .ct-hero__text {
+      padding-left: max(2.5rem, calc((100vw - 76rem) / 2 + 2.5rem));
+    }
+
+    .ct-hero__media :global(.photo),
+    .ct-hero__media :global(.photo__frame) {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+  }
+
+  /* How to book band */
+  .book__grid {
+    display: grid;
+    grid-template-areas: 'intro' 'ways' 'extra';
+    gap: 2.5rem;
+  }
+
+  .book__intro {
+    grid-area: intro;
+  }
+
+  .ways {
+    grid-area: ways;
+  }
+
+  .book__extra {
+    grid-area: extra;
+  }
+
+  .book__intro,
+  .book__extra {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .book .index {
+    color: var(--accent-soft);
+  }
+
+  .book__lede {
+    color: var(--band-soft);
+    max-width: 30rem;
+  }
+
+  .book__include {
+    padding: 1.1rem 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--band-soft) 28%, transparent);
+  }
+
+  .book__include-title {
+    margin-bottom: 0.6rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+  }
+
+  .book__include ul {
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.93rem;
+    color: var(--band-soft);
+  }
+
+  .book__include li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .book__include :global(.icon) {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.3rem;
+    color: var(--accent-soft);
+    stroke-width: 1.7;
+  }
+
+  .book__privacy {
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent-soft);
+    font-size: 0.88rem;
+    color: var(--band-soft);
+  }
+
+  /* Big call / text / email rows */
+  .ways {
+    align-self: center;
+    border-top: 1px solid color-mix(in srgb, var(--band-soft) 30%, transparent);
+  }
+
+  .ways a {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 1.6rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--band-soft) 30%, transparent);
+    color: var(--band-ink);
+    text-decoration: none;
+    transition: color 0.25s ease, padding 0.3s ease;
+  }
+
+  .ways__label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+  }
+
+  .ways__value {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.4rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .ways :global(.ways__arrow) {
+    width: 1.3rem;
+    height: 1.3rem;
+    align-self: center;
+    transition: transform 0.3s ease;
+  }
+
+  .ways a:hover {
+    padding-left: 0.5rem;
+    color: var(--accent-soft);
+  }
+
+  .ways a:hover :global(.ways__arrow) {
+    transform: translateX(4px);
+  }
+
+  .ways :global(mark.ph) {
+    background: color-mix(in srgb, var(--band-ink) 12%, transparent);
+    color: inherit;
+  }
+
+  @media (min-width: 900px) {
+    .book__grid {
+      grid-template-columns: 0.85fr 1.15fr;
+      grid-template-areas: 'intro ways' 'extra ways';
+      gap: 2rem clamp(3rem, 7vw, 7rem);
+    }
+  }
+</style>

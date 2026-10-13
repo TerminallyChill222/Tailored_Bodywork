@@ -1,0 +1,54 @@
+---
+/** Tall, narrow photo strips with rotated captions (after the Yoga Club inspo). */
+import Photo from '../Photo.astro';
+
+interface Props {
+  items: { label: string; src: string; alt?: string }[];
+}
+const { items } = Astro.props;
+---
+
+<ul role="list" class="strips">
+  {
+    items.map((item, i) => (
+      <li class="strip" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+        <span class="vertical-label">{item.label}</span>
+        <Photo src={item.src} alt={item.alt ?? ''} aspect="1 / 2.6" shape="rect" stock={false} sizes="(min-width: 900px) 20vw, 45vw" />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .strips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.25rem;
+  }
+
+  .strip {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: end;
+  }
+
+  .strip .vertical-label {
+    color: var(--ink-soft);
+  }
+
+  .strip:nth-child(even) {
+    margin-top: 3rem;
+  }
+
+  @media (min-width: 900px) {
+    .strips {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .strip:nth-child(even) {
+      margin-top: 4rem;
+    }
+  }
+</style>

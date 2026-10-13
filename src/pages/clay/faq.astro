@@ -1,0 +1,247 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CtaImage from '../../components/clay/CtaImage.astro';
+import { site } from '../../data/site';
+import { faqGroups } from '../../data/faq';
+import { images } from '../../data/images';
+import { rich, plain, pad } from '../../lib/utils';
+
+// FAQ structured data — only emitted once answers are confirmed (site.flags.structuredData).
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqGroups.flatMap((g) =>
+    g.items.map((item) => ({ '@type': 'Question', name: item.q, acceptedAnswer: { '@type': 'Answer', text: plain(item.a) } })),
+  ),
+};
+---
+
+<Layout
+  version="clay"
+  title="FAQ"
+  description={`Answers to common questions about in-home bodywork in ${site.city}: preparing your space, draping, pressure, booking, travel, and health & safety.`}
+>
+  <section class="section faq" aria-labelledby="faq-title">
+    <div class="container">
+      <header class="faq__head" data-reveal>
+        <p class="index">( FAQ )</p>
+        <h1 id="faq-title">Questions <em>&amp; answers</em></h1>
+        <p class="lede">Everything from how much space you need to how draping works. If your question isn’t here, just ask.</p>
+      </header>
+
+      <div class="faq__tabs" data-tabs>
+        <div class="faq__tablist" role="tablist" aria-label="FAQ categories">
+          {
+            faqGroups.map((g, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`tab-${g.id}`}
+                aria-controls={g.id}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+              >
+                {g.title}
+                <span class="faq__count">{pad(g.items.length)}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          faqGroups.map((g, gi) => (
+            <div class="faq__panel" role="tabpanel" id={g.id} aria-labelledby={`tab-${g.id}`} hidden={gi !== 0} tabindex="0">
+              <h2 class="visually-hidden">{g.title}</h2>
+              {g.items.map((item, i) => (
+                <details class="qa">
+                  <summary>
+                    <span class="qa__n">{pad(i + 1)}</span>
+                    <span class="qa__q">{item.q}</span>
+                    <span class="qa__sign" aria-hidden="true" />
+                  </summary>
+                  <div class="qa__a">
+                    {item.draft && <p><span class="draft-tag">Draft answer</span></p>}
+                    <p set:html={rich(item.a)} />
+                  </div>
+                </details>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {site.flags.structuredData && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+
+  <CtaImage
+    eyebrow="Still curious?"
+    title="Ask me *anything*"
+    body="Send a message with your question — or anything that would help you feel comfortable booking. I’ll get back to you personally."
+    image={images.morning.src}
+  />
+</Layout>
+
+<script>
+  import '../../scripts/tabs';
+
+  // Open the right category when arriving with a #hash (e.g. /faq#booking).
+  const id = location.hash.slice(1);
+  const tab = id && document.getElementById(`tab-${id}`);
+  if (tab instanceof HTMLButtonElement) tab.click();
+</script>
+
+<style>
+  .faq__head {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    margin-bottom: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+
+  .faq__head .lede {
+    margin-inline: auto;
+  }
+
+  .faq__tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+    justify-content: flex-start;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .faq__tablist button {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex: none;
+    padding: 1rem 0;
+    margin-bottom: -1px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .faq__tablist button:hover {
+    color: var(--ink);
+  }
+
+  .faq__tablist button[aria-selected='true'] {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
+  .faq__count {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    color: var(--eyebrow);
+  }
+
+  @media (min-width: 760px) {
+    .faq__tablist {
+      justify-content: center;
+      gap: 0 2.25rem;
+    }
+  }
+
+  .faq__panel {
+    max-width: 52rem;
+    margin: clamp(1.5rem, 1rem + 2vw, 3rem) auto 0;
+  }
+
+  .faq__panel:focus-visible {
+    outline-offset: 8px;
+  }
+
+  .qa {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .qa summary {
+    display: grid;
+    grid-template-columns: 2.75rem 1fr auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 1.4rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qa summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .qa__n {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--eyebrow);
+  }
+
+  .qa__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.65rem);
+    line-height: 1.25;
+    transition: color 0.25s ease;
+  }
+
+  .qa summary:hover .qa__q {
+    color: var(--accent);
+  }
+
+  .qa__sign {
+    position: relative;
+    width: 0.9rem;
+    height: 0.9rem;
+    align-self: center;
+  }
+
+  .qa__sign::before,
+  .qa__sign::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--ink);
+    transition: transform 0.3s ease;
+  }
+
+  .qa__sign::after {
+    transform: rotate(90deg);
+  }
+
+  .qa[open] .qa__sign::after {
+    transform: rotate(0);
+  }
+
+  .qa__a {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0 2rem 1.75rem 3.5rem;
+    color: var(--ink-soft);
+  }
+
+  .qa[open] .qa__a {
+    animation: qa-in 0.4s ease;
+  }
+
+  @keyframes qa-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+</style>

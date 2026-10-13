@@ -1,0 +1,113 @@
+/*
+ * Design tokens for the two design directions.
+ *   Version A — "sage": warm ivory, cream, sage & olive. Cormorant Garamond + Jost. Arches, pills.
+ *   Version B — "clay": sand, beige, warm charcoal & rust. Instrument Serif + Manrope. Editorial caps, full-bleed
+ *   photography, capsule frames. Version B has its own pages under src/pages/clay/.
+ * Once a direction is chosen, delete the other block (see README).
+ */
+
+:root,
+[data-theme='sage'] {
+  --bg: #f6f2ea;
+  --bg-alt: #ede7db;
+  --surface: #fbf9f4;
+  --ink: #2c3128;
+  --ink-soft: #565c50;
+  --ink-faint: #6c7064;
+  --line: #d8d0c1;
+  --line-strong: #bdb3a2;
+
+  --accent: #55634a;        /* buttons, links — passes AA with --surface text */
+  --accent-hover: #444f3b;
+  --accent-ink: #f8f5ee;
+  --accent-soft: #a7ae96;   /* decorative sage */
+  --accent-wash: #cbd0bc;   /* sage section background */
+  --eyebrow: #5f6347;       /* small tracked labels */
+  --emphasis: #5f6e52;      /* italic words in headings */
+
+  --band: #4b5542;          /* deep olive band */
+  --band-ink: #f1ede3;
+  --band-soft: #c9cfbb;
+
+  --ph-bg: #e3e6da;         /* placeholder highlight */
+  --ph-ink: #474d3c;
+  --ph-line: #929a80;
+
+  --font-display: 'Cormorant Garamond', 'Cormorant', Georgia, serif;
+  --font-body: 'Jost', 'Avenir Next', 'Helvetica Neue', system-ui, sans-serif;
+  --display-weight: 500;
+  --display-tracking: -0.01em;
+  --display-scale: 1.12;    /* Cormorant runs small; scale display sizes up */
+  --display-variation: normal;
+
+  --radius-xs: 6px;
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-btn: 999px;
+  --radius-feature: 999px 999px var(--radius) var(--radius); /* arch */
+  --radius-chip: 999px;
+
+  --btn-case: none;
+  --btn-tracking: 0.02em;
+  --btn-size: 0.95rem;
+  --btn-weight: 500;
+  --eyebrow-tracking: 0.22em;
+
+  --shadow-soft: 0 1px 2px rgb(60 60 40 / 0.04), 0 12px 32px -12px rgb(60 60 40 / 0.14);
+  color-scheme: light;
+}
+
+[data-theme='clay'] {
+  --bg: #f3eee7;
+  --bg-alt: #e9e1d6;
+  --surface: #faf7f2;
+  --ink: #2b2a28;           /* warm charcoal */
+  --ink-soft: #5d5955;
+  --ink-faint: #6f6a64;
+  --line: #dcd3c7;
+  --line-strong: #c2b7a9;
+
+  --accent: #a4532e;        /* rust — buttons and large text */
+  --accent-hover: #8a4222;
+  --accent-ink: #faf7f2;
+  --accent-soft: #d2a487;
+  --accent-wash: #ecdccd;   /* peach-sand */
+  --eyebrow: #8f4524;       /* small rust labels (AA on every light background) */
+  --emphasis: #a4532e;
+
+  --stone: #645d57;         /* taupe block */
+  --stone-ink: #f4efe8;
+  --stone-soft: #e2dbd1;
+  --stone-accent: #f3d6c1;  /* peach accent that passes AA on stone */
+
+  --band: #2a2927;          /* charcoal */
+  --band-ink: #f2ede6;
+  --band-soft: #c2b9ae;
+
+  --ph-bg: #f1dccb;
+  --ph-ink: #6e3b22;
+  --ph-line: #c0794f;
+
+  --font-display: 'Instrument Serif', 'Times New Roman', Georgia, serif;
+  --font-body: 'Manrope', 'Helvetica Neue', system-ui, sans-serif;
+  --display-weight: 400;
+  --display-tracking: 0;
+  --display-scale: 1;
+  --display-variation: normal;
+  --caps-tracking: 0.03em;
+
+  --radius-xs: 0;
+  --radius-sm: 2px;
+  --radius: 0;
+  --radius-btn: 0;
+  --radius-feature: 0;
+  --radius-chip: 0;
+
+  --btn-case: uppercase;
+  --btn-tracking: 0.18em;
+  --btn-size: 0.74rem;
+  --btn-weight: 600;
+  --eyebrow-tracking: 0.28em;
+
+  --shadow-soft: 0 1px 2px rgb(30 28 26 / 0.05), 0 18px 40px -18px rgb(30 28 26 / 0.25);
+}

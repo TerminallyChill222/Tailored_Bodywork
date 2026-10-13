@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/utils';
+---
+
+<Layout title="Page not found" description="This page couldn’t be found.">
+  <section class="section simple">
+    <div class="container container--narrow simple__inner">
+      <span class="icon-badge"><Icon name="leaf" /></span>
+      <p class="eyebrow eyebrow--center">Page not found</p>
+      <h1>This page has <em>wandered off</em>.</h1>
+      <p class="lede">The link may be out of date. Try one of these instead.</p>
+      <div class="btn-row">
+        <a class="btn btn--primary" href={url('experience')}>Your in-home experience</a>
+        <a class="btn btn--ghost" href={url()}>Back to home</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .simple__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    padding-block: 2rem;
+  }
+
+  .simple__inner .lede {
+    margin-inline: auto;
+  }
+
+  .simple__inner .btn-row {
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+</style>

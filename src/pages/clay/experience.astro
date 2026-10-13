@@ -1,0 +1,326 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import CtaImage from '../../components/clay/CtaImage.astro';
+import { site } from '../../data/site';
+import { experience, brings, checklist } from '../../data/experience';
+import { images, scenes } from '../../data/images';
+import { rich, vurl, pad } from '../../lib/utils';
+---
+
+<Layout
+  version="clay"
+  title="Your In-Home Experience"
+  description={`Exactly what happens during an in-home bodywork session in ${site.city} — from booking and setup to draping, consent, and payment.`}
+>
+  <!-- Split hero: photo + stone panel with chapter index -->
+  <section class="xp-hero" aria-labelledby="xp-title">
+    <div class="xp-hero__media">
+      <Photo src={scenes.clay.room.src} alt={scenes.clay.room.alt} position="60% center" shape="rect" aspect="auto" eager sizes="(min-width: 900px) 50vw, 100vw" />
+    </div>
+    <div class="xp-hero__panel section--stone">
+      <p class="index" data-reveal>( The in-home experience )</p>
+      <h1 id="xp-title" data-reveal style="--reveal-delay:.06s">From booking <em>to goodbye</em></h1>
+      <p class="xp-hero__lede" data-reveal style="--reveal-delay:.12s">
+        Inviting someone into your home should feel easy and predictable. Here’s every step of an appointment — so there
+        are no surprises.
+      </p>
+      <nav aria-label="Chapters" data-reveal style="--reveal-delay:.18s">
+        <ol role="list" class="xp-hero__index">
+          {
+            experience.map((s, i) => (
+              <li>
+                <a href={`#${s.id}`}>
+                  <span>{pad(i + 1)}</span>
+                  {s.eyebrow}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </div>
+  </section>
+
+  <aside class="container xp-note draft-only">
+    <span class="draft-tag">Draft</span>
+    <p>Policy language on this page is a starting point based on common professional practice. Torey should review and confirm every detail before launch.</p>
+  </aside>
+
+  <!-- Chapters -->
+  <section class="section xp" aria-label="Appointment details">
+    <div class="container">
+      {
+        experience.map((s, i) => (
+          <section class="ch" id={s.id} aria-labelledby={`${s.id}-t`}>
+            <div class="ch__num numeral" aria-hidden="true" data-reveal>
+              {pad(i + 1)}
+            </div>
+            <div class="ch__title" data-reveal>
+              <p class="index">{s.eyebrow}</p>
+              <h2 id={`${s.id}-t`} class="h3 sc">{s.title}</h2>
+            </div>
+            <div class="ch__body" data-reveal style="--reveal-delay:.08s">
+              <div class="prose">
+                {s.body.map((p) => <p set:html={rich(p)} />)}
+              </div>
+
+              {s.id === 'equipment' && (
+                <ul role="list" class="brings">
+                  {brings.map((b) => (
+                    <li>
+                      <Icon name={b.icon} />
+                      <span set:html={rich(b.label)} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {s.id === 'prepare' && (
+                <div class="prep">
+                  <p class="prep__title">Your checklist</p>
+                  <ul role="list">
+                    {checklist.map((c, k) => (
+                      <li>
+                        <span class="prep__n">{pad(k + 1)}</span>
+                        <span set:html={rich(c)} />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {s.id === 'consent' && (
+                <blockquote class="pull">
+                  <p>“Lighter,” “firmer,” “skip that area,” or “let’s stop” — <em>always welcome, never questioned.</em></p>
+                </blockquote>
+              )}
+            </div>
+          </section>
+        ))
+      }
+
+      <p class="xp__more" data-reveal>
+        Still wondering about something? <a href={vurl('clay', 'faq')}>Read the FAQ</a> or <a href={vurl('clay', 'contact')}>ask me directly</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Edge-to-edge triptych -->
+  <section class="triptych" aria-hidden="true">
+    <Photo src={images.linens.src} alt="" shape="rect" aspect="1 / 1" stock={false} sizes="34vw" />
+    <Photo src={images.leafShadow.src} alt="" shape="rect" aspect="1 / 1" stock={false} sizes="34vw" />
+    <Photo src={images.supplies.src} alt="" shape="rect" aspect="1 / 1" stock={false} sizes="34vw" />
+  </section>
+
+  <CtaImage title="Your space. *Your pace.*" image={scenes.clay.towel.src} />
+</Layout>
+
+<style>
+  /* Hero */
+  .xp-hero {
+    display: grid;
+  }
+
+  .xp-hero__media :global(.photo__frame) {
+    aspect-ratio: 4 / 3;
+  }
+
+  .xp-hero__panel {
+    display: grid;
+    gap: 1.4rem;
+    align-content: center;
+    padding: clamp(3rem, 2rem + 4vw, 6rem) clamp(1.25rem, 5vw, 5rem);
+  }
+
+  .xp-hero__panel .index {
+    color: var(--stone-accent);
+  }
+
+  .xp-hero__panel h1 em {
+    display: block;
+  }
+
+  .xp-hero__lede {
+    max-width: 30rem;
+  }
+
+  .xp-hero__index {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--stone-soft) 30%, transparent);
+  }
+
+  .xp-hero__index a {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--stone-soft) 30%, transparent);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--stone-ink);
+    transition: color 0.25s ease;
+  }
+
+  .xp-hero__index a span {
+    color: var(--stone-accent);
+  }
+
+  .xp-hero__index a:hover {
+    color: var(--stone-accent);
+  }
+
+  @media (min-width: 1000px) {
+    .xp-hero {
+      grid-template-columns: 1fr 1fr;
+      min-height: min(88vh, 54rem);
+    }
+
+    .xp-hero__media :global(.photo),
+    .xp-hero__media :global(.photo__frame) {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+  }
+
+  /* Draft note */
+  .xp-note {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-top: 2.5rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  /* Chapters */
+  .xp {
+    padding-top: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .ch {
+    display: grid;
+    gap: 1rem;
+    padding-block: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .ch__num {
+    font-size: clamp(3rem, 2rem + 3vw, 5.5rem);
+  }
+
+  .ch__title {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+  }
+
+  .ch__body {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .ch {
+      grid-template-columns: 9rem 0.9fr 1.3fr;
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: start;
+    }
+
+    .ch__title {
+      position: sticky;
+      top: 8rem;
+    }
+  }
+
+  .brings {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .brings li {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink-soft);
+  }
+
+  .brings :global(.icon) {
+    color: var(--accent);
+  }
+
+  .prep {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    background: var(--band);
+    color: var(--band-ink);
+  }
+
+  .prep__title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--accent-soft);
+    margin-bottom: 1rem;
+  }
+
+  .prep ul {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .prep li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    color: var(--band-soft);
+  }
+
+  .prep__n {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--accent-soft);
+  }
+
+  .pull {
+    margin: 0;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  .pull p {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.9rem);
+    line-height: 1.3;
+  }
+
+  .pull em {
+    color: var(--accent);
+  }
+
+  .xp__more {
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line-strong);
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  .xp__more a {
+    color: var(--accent);
+  }
+
+  /* Triptych */
+  .triptych {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+</style>

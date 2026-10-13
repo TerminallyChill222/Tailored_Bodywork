@@ -1,0 +1,326 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { experience, brings, checklist } from '../data/experience';
+import { images, scenes } from '../data/images';
+import { rich, url } from '../lib/utils';
+---
+
+<Layout
+  title="Your In-Home Experience"
+  description={`Exactly what happens during an in-home bodywork session in ${site.city} — from booking and setup to draping, consent, and payment.`}
+>
+  <PageHeader
+    eyebrow="Your in-home experience"
+    title="Exactly what to expect, *from booking to goodbye*"
+    lede="Inviting someone into your home should feel easy and predictable. Here’s every step of an appointment, so there are no surprises — just a calm, professional session in your own space."
+    image={scenes.sage.corner}
+  />
+
+  <section class="section section--tight exp" aria-label="Appointment details">
+    <div class="container exp__grid">
+      <nav class="exp__toc" aria-label="On this page">
+        <p class="eyebrow">On this page</p>
+        <ol role="list">
+          {
+            experience.map((s) => (
+              <li>
+                <a href={`#${s.id}`}>{s.title}</a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="exp__body">
+        <aside class="exp__note draft-only">
+          <span class="draft-tag">Draft</span>
+          <p>Policy language on this page is a starting point based on common professional practice. Torey should review and confirm every detail before launch.</p>
+        </aside>
+
+        {
+          experience.map((s, i) => (
+            <section class="exp__section" id={s.id} aria-labelledby={`${s.id}-title`} data-reveal>
+              <p class="exp__step">
+                <span class="exp__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="eyebrow">{s.eyebrow}</span>
+              </p>
+              <h2 id={`${s.id}-title`} class="h3">{s.title}</h2>
+              <div class="prose">
+                {s.body.map((p) => <p set:html={rich(p)} />)}
+              </div>
+
+              {s.id === 'equipment' && (
+                <ul role="list" class="brings">
+                  {brings.map((b) => (
+                    <li>
+                      <span class="icon-badge"><Icon name={b.icon} /></span>
+                      <span set:html={rich(b.label)} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {s.id === 'prepare' && (
+                <ul role="list" class="prep">
+                  {checklist.map((c) => (
+                    <li>
+                      <span class="prep__box" aria-hidden="true"><Icon name="check" /></span>
+                      <span set:html={rich(c)} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {s.id === 'consent' && (
+                <p class="exp__callout">
+                  <Icon name="heart" />
+                  <span>“Lighter,” “firmer,” “skip that area,” or “let’s stop” — always welcome, never questioned.</span>
+                </p>
+              )}
+            </section>
+          ))
+        }
+
+        <div class="exp__more" data-reveal>
+          <p>Still wondering about something?</p>
+          <a class="text-link" href={url('faq')}>Read the FAQ <Icon name="arrow" class="arrow" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt exp-gallery" aria-hidden="true">
+    <div class="container exp-gallery__grid">
+      <Photo src={images.linens.src} alt="" aspect="1 / 1" sizes="(min-width: 800px) 30vw, 50vw" stock={false} />
+      <Photo src={images.morning.src} alt="" aspect="1 / 1" sizes="(min-width: 800px) 30vw, 50vw" shape="feature" stock={false} />
+      <Photo src={images.supplies.src} alt="" aspect="1 / 1" sizes="(min-width: 800px) 30vw, 50vw" stock={false} />
+    </div>
+  </section>
+
+  <CtaBand title="Your space. *Your pace.*" />
+</Layout>
+
+<style>
+  .exp__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .exp__toc {
+    display: none;
+  }
+
+  .exp__body {
+    display: grid;
+    gap: 0;
+    max-width: 46rem;
+  }
+
+  .exp__note {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 2.5rem;
+    border: 1px dashed var(--ph-line);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--ph-bg) 45%, transparent);
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  .exp__section {
+    display: grid;
+    gap: 1.1rem;
+    padding-block: clamp(2.25rem, 1.75rem + 2vw, 3.5rem);
+    border-top: 1.5px dashed var(--line-strong);
+  }
+
+  .exp__section:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .exp__step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .exp__step .eyebrow::before {
+    display: none;
+  }
+
+  .exp__num {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-style: italic;
+    font-size: calc(1rem * var(--display-scale));
+    color: var(--emphasis);
+  }
+
+  .brings {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .brings li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--ink-soft);
+  }
+
+  .brings .icon-badge {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .brings .icon-badge :global(.icon) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  @media (min-width: 640px) {
+    .brings {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .prep {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  .prep li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    color: var(--ink-soft);
+  }
+
+  .prep__box {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-top: 0.2rem;
+    border: 1px solid var(--accent-soft);
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  .prep__box :global(.icon) {
+    width: 0.9rem;
+    height: 0.9rem;
+    stroke-width: 2;
+  }
+
+  .exp__callout {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    padding: 1.25rem 1.4rem;
+    background: var(--accent-wash);
+    border-radius: var(--radius);
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-size: calc(1.2rem * var(--display-scale));
+    line-height: 1.45;
+  }
+
+  .exp__callout :global(.icon) {
+    color: var(--accent);
+    margin-top: 0.2rem;
+  }
+
+  .exp__more {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    padding-top: 2rem;
+    border-top: 1.5px dashed var(--line-strong);
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 1000px) {
+    .exp__grid {
+      grid-template-columns: 16rem 1fr;
+      gap: clamp(3rem, 7vw, 7rem);
+    }
+
+    .exp__toc {
+      display: block;
+      position: sticky;
+      top: 7rem;
+      align-self: start;
+    }
+
+    .exp__toc ol {
+      display: grid;
+      gap: 0.15rem;
+      margin-top: 1.25rem;
+      border-left: 1px solid var(--line);
+    }
+
+    .exp__toc a {
+      display: block;
+      padding: 0.45rem 0 0.45rem 1.1rem;
+      margin-left: -1px;
+      border-left: 1px solid transparent;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--ink-soft);
+      text-decoration: none;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .exp__toc a:hover,
+    .exp__toc a[aria-current='true'] {
+      color: var(--ink);
+      border-left-color: var(--accent);
+    }
+  }
+
+  .exp-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+  }
+</style>
+
+<script>
+  // Highlight the current section in the table of contents.
+  const links = document.querySelectorAll<HTMLAnchorElement>('.exp__toc a');
+  const sections = [...document.querySelectorAll<HTMLElement>('.exp__section')];
+  if ('IntersectionObserver' in window && links.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          links.forEach((a) => a.setAttribute('aria-current', String(a.hash === `#${entry.target.id}`)));
+        });
+      },
+      { rootMargin: '-30% 0px -60% 0px' },
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+</script>

@@ -1,0 +1,195 @@
+---
+/**
+ * Single centered testimonial on charcoal, with previous/next controls (after the Ritualize and Indigo inspo).
+ * Reads from src/data/testimonials.ts. While that list is empty, shows a placeholder — never invented quotes.
+ */
+import Icon from '../Icon.astro';
+import { testimonials } from '../../data/testimonials';
+import { vurl } from '../../lib/utils';
+
+interface Props {
+  index?: string;
+}
+const { index = '06' } = Astro.props;
+const hasQuotes = testimonials.length > 0;
+---
+
+<section class="section section--band qb" aria-labelledby="qb-title">
+  <div class="container qb__inner">
+    <p class="index">( {index} ) — Kind words</p>
+    <h2 id="qb-title" class="visually-hidden">What clients say</h2>
+    <span class="qb__mark" aria-hidden="true">“</span>
+
+    {
+      hasQuotes ? (
+        <div class="qb__slides" data-quotes aria-live="polite">
+          {testimonials.map((t, i) => (
+            <figure class="qb__slide" hidden={i !== 0}>
+              <blockquote>
+                <p>{t.quote}</p>
+              </blockquote>
+              <figcaption>
+                {t.name}
+                {t.detail && <span> · {t.detail}</span>}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      ) : (
+        <div class="qb__slide qb__slide--empty" data-reveal>
+          <p class="qb__empty">Words from real clients will live here.</p>
+          <p class="qb__note">
+            Reviews are added only with a client’s permission.
+            <span class="draft-only"> (Placeholder — add testimonials in <code>src/data/testimonials.ts</code>.)</span>
+          </p>
+        </div>
+      )
+    }
+
+    <div class="qb__controls">
+      <button type="button" class="qb__btn" data-quote-prev disabled={testimonials.length < 2} aria-label="Previous review">
+        <Icon name="arrow" />
+      </button>
+      <span class="qb__dots" aria-hidden="true">
+        {Array.from({ length: Math.max(testimonials.length, 3) }).map((_, i) => <span class:list={{ on: i === 0 }} />)}
+      </span>
+      <button type="button" class="qb__btn" data-quote-next disabled={testimonials.length < 2} aria-label="Next review">
+        <Icon name="arrow" />
+      </button>
+    </div>
+
+    {!hasQuotes && <a class="qb__link" href={vurl('clay', 'experience')}>New here? See exactly how a session works</a>}
+  </div>
+</section>
+
+<script>
+  const wrap = document.querySelector<HTMLElement>('[data-quotes]');
+  if (wrap) {
+    const slides = [...wrap.querySelectorAll<HTMLElement>('.qb__slide')];
+    const dots = [...document.querySelectorAll<HTMLElement>('.qb__dots span')];
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => (s.hidden = k !== i));
+      dots.forEach((d, k) => d.classList.toggle('on', k === i));
+    };
+    document.querySelector('[data-quote-prev]')?.addEventListener('click', () => show(i - 1));
+    document.querySelector('[data-quote-next]')?.addEventListener('click', () => show(i + 1));
+  }
+</script>
+
+<style>
+  .qb__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    max-width: 52rem;
+  }
+
+  .qb .index {
+    color: var(--accent-soft);
+  }
+
+  .qb__mark {
+    font-family: var(--font-display);
+    font-size: 6rem;
+    line-height: 0.6;
+    height: 3rem;
+    color: var(--accent-soft);
+  }
+
+  .qb__slide blockquote,
+  .qb__empty {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.6rem, 1.1rem + 2vw, 2.6rem);
+    line-height: 1.3;
+    color: var(--band-ink);
+    text-wrap: balance;
+  }
+
+  .qb__slide figcaption {
+    margin-top: 1.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--band-soft);
+  }
+
+  .qb__note {
+    margin-top: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--band-soft);
+  }
+
+  .qb__note code {
+    font-size: 0.85em;
+  }
+
+  .qb__controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .qb__btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid color-mix(in srgb, var(--band-soft) 40%, transparent);
+    background: none;
+    color: var(--band-ink);
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .qb__btn[data-quote-prev] :global(.icon) {
+    transform: rotate(180deg);
+  }
+
+  .qb__btn:not(:disabled):hover {
+    border-color: var(--band-ink);
+  }
+
+  .qb__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .qb__dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .qb__dots span {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--band-soft) 40%, transparent);
+  }
+
+  .qb__dots span.on {
+    background: var(--accent-soft);
+  }
+
+  .qb__link {
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--band-ink);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--band-ink) 40%, transparent);
+    padding-bottom: 0.2rem;
+  }
+
+  .qb__link:hover {
+    border-color: var(--band-ink);
+  }
+</style>

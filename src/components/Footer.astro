@@ -1,0 +1,188 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, nav } from '../data/site';
+import { url, rich, bookingHref } from '../lib/utils';
+
+const year = new Date().getFullYear();
+const socials = site.social.filter((s) => s.href);
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__brand">
+        <Logo tone="light" />
+        <p>
+          Personalized, professional bodywork brought to your home in {site.city} and nearby neighborhoods.
+        </p>
+        <a class="btn btn--light" href={bookingHref()}>Book a Session</a>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2 class="site-footer__heading">Explore</h2>
+        <ul role="list">
+          <li><a href={url()}>Home</a></li>
+          {nav.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div>
+        <h2 class="site-footer__heading">Get in touch</h2>
+        <ul role="list" class="site-footer__contact">
+          <li>
+            <Icon name="mail" />
+            <a href={`mailto:${site.contact.email}`}><Fragment set:html={rich(`[[${site.contact.email}]]`)} /></a>
+          </li>
+          <li>
+            <Icon name="phone" />
+            <a href={site.contact.phoneHref}><Fragment set:html={rich(`[[${site.contact.phone}]]`)} /></a>
+          </li>
+          <li>
+            <Icon name="pin" />
+            <span>{site.serviceArea.summary}</span>
+          </li>
+          {
+            socials.map((s) => (
+              <li>
+                <Icon name="instagram" />
+                <a href={s.href} rel="noopener" target="_blank">{s.label}</a>
+              </li>
+            ))
+          }
+          {socials.length === 0 && (
+            <li>
+              <Icon name="instagram" />
+              <span set:html={rich('[[@instagram handle]]')} />
+            </li>
+          )}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="site-footer__heading">Hours</h2>
+        <dl class="site-footer__hours">
+          {
+            site.hours.map((h) => (
+              <div>
+                <dt>{h.days}</dt>
+                <dd set:html={rich(h.time)} />
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+
+    <div class="site-footer__base">
+      <p>© {year} {site.name}. All rights reserved.</p>
+      <p class="draft-only">Draft site — highlighted text and photos are placeholders.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--band);
+    color: var(--band-soft);
+    padding-block: clamp(4rem, 3rem + 4vw, 6rem) 2rem;
+    font-size: 0.95rem;
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: 3rem 2rem;
+  }
+
+  .site-footer__brand {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    max-width: 22rem;
+  }
+
+  .site-footer__heading {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--band-ink);
+    margin-bottom: 1.1rem;
+  }
+
+  .site-footer ul {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .site-footer a:not(.btn) {
+    color: var(--band-soft);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .site-footer a:not(.btn):hover {
+    color: var(--band-ink);
+  }
+
+  .site-footer__contact li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .site-footer__contact :global(.icon) {
+    width: 1.1rem;
+    height: 1.1rem;
+    opacity: 0.8;
+  }
+
+  .site-footer__hours {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+  }
+
+  .site-footer__hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px dashed color-mix(in srgb, var(--band-soft) 35%, transparent);
+  }
+
+  .site-footer__hours dd {
+    margin: 0;
+    color: var(--band-ink);
+  }
+
+  .site-footer :global(mark.ph) {
+    background: color-mix(in srgb, var(--band-ink) 14%, transparent);
+    color: var(--band-ink);
+    border-bottom-color: var(--band-soft);
+  }
+
+  .site-footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--band-soft) 25%, transparent);
+    font-size: 0.82rem;
+  }
+
+  @media (min-width: 700px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__grid {
+      grid-template-columns: 1.4fr 0.8fr 1.1fr 1fr;
+    }
+  }
+</style>

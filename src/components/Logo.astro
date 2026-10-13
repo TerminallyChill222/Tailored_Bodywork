@@ -1,0 +1,82 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/utils';
+
+interface Props {
+  tone?: 'default' | 'light';
+  showTagline?: boolean;
+}
+const { tone = 'default', showTagline = true } = Astro.props;
+---
+
+<a href={url()} class:list={['logo', `logo--${tone}`]} aria-label={`${site.name} — home`}>
+  <svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true">
+    <circle cx="20" cy="20" r="18.5" />
+    <path d="M12.5 27.5c0-9 5.6-14.6 15-15 .4 9.3-5.4 15-15 15Z" />
+    <path class="logo__stitch" d="M12.5 27.5c3.4-3.9 6.9-7.4 11-10.4" />
+  </svg>
+  <span class="logo__text">
+    <span class="logo__name">{site.name}</span>
+    {showTagline && <span class="logo__tag">Mobile bodywork · {site.city}</span>}
+  </span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .logo--light {
+    color: var(--band-ink);
+  }
+
+  .logo__mark {
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    color: var(--accent);
+  }
+
+  .logo--light .logo__mark {
+    color: var(--band-soft);
+  }
+
+  .logo__stitch {
+    stroke-dasharray: 1.6 2.2;
+  }
+
+  .logo__text {
+    display: grid;
+    line-height: 1.05;
+  }
+
+  .logo__name {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    font-variation-settings: var(--display-variation);
+    font-size: calc(1.4rem * var(--display-scale));
+    letter-spacing: var(--display-tracking);
+    white-space: nowrap;
+  }
+
+  .logo__tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-top: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .logo--light .logo__tag {
+    color: var(--band-soft);
+  }
+</style>

@@ -1,0 +1,98 @@
+---
+import Icon from './Icon.astro';
+import { steps } from '../data/experience';
+import { rich } from '../lib/utils';
+---
+
+<ol class="steps" role="list">
+  {
+    steps.map((step, i) => (
+      <li class="step" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+        <div class="step__marker">
+          <span class="icon-badge">
+            <Icon name={step.icon} />
+          </span>
+          <span class="step__num" aria-hidden="true">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+        </div>
+        <h3 class="h4">
+          <span class="visually-hidden">Step {i + 1}: </span>
+          {step.title}
+        </h3>
+        <p set:html={rich(step.body)} />
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .steps {
+    display: grid;
+    gap: 2.75rem;
+    position: relative;
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    gap: 0.85rem;
+    align-content: start;
+  }
+
+  .step p {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .step__marker {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .step__num {
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-style: italic;
+    font-size: calc(1.25rem * var(--display-scale));
+    color: var(--emphasis);
+  }
+
+  @media (min-width: 720px) {
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 2.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    /* Version A: a dashed "stitch" connecting the steps */
+    :global([data-theme='sage']) .steps::before {
+      content: '';
+      position: absolute;
+      top: 1.875rem;
+      left: 3.75rem;
+      right: 2rem;
+      border-top: 1.5px dashed var(--line-strong);
+      z-index: 0;
+    }
+
+    :global([data-theme='sage']) .step__marker {
+      position: relative;
+      z-index: 1;
+    }
+
+    :global([data-theme='sage']) .step__num {
+      background: var(--bg);
+      padding-inline: 0.5rem;
+      margin-left: -0.5rem;
+    }
+  }
+</style>

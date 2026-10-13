@@ -1,0 +1,425 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { scenes } from '../data/images';
+import { services, included, addOns, packages } from '../data/services';
+import { rich, formatPrice, url, bookingHref } from '../lib/utils';
+
+---
+
+<Layout
+  title="Services & Pricing"
+  description={`In-home bodywork sessions in ${site.city} with clear, upfront pricing. Choose 60, 90, or 120 minutes — every session tailored to you.`}
+>
+  <PageHeader
+    eyebrow="Services & pricing"
+    title="Clear options, *tailored* to you"
+    lede="Every session is adjusted to your body on the day, so these are starting points rather than fixed routines. Pricing is upfront, and everything you need for the session comes with me."
+    image={scenes.sage.towel}
+  >
+    <p class="draft-only"><span class="draft-tag">Service menu, durations & prices to confirm</span></p>
+  </PageHeader>
+
+  <!-- Included -->
+  <section class="included" aria-labelledby="included-title">
+    <div class="container">
+      <div class="included__inner on-wash" data-reveal>
+        <h2 id="included-title" class="included__title">Every session includes</h2>
+        <ul role="list" class="included__list">
+          {
+            included.map((item) => (
+              <li>
+                <Icon name="check" />
+                <span set:html={rich(item)} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section" aria-label="Services">
+    <div class="container service-list">
+      {
+        services.map((s, i) => (
+          <article class="service" id={s.slug} data-reveal>
+            <div class="service__intro">
+              <p class="eyebrow">{String(i + 1).padStart(2, '0')} {s.featured && <span>· Start here</span>}</p>
+              <h2 class="h3" set:html={rich(s.name)} />
+              <p class="service__short" set:html={rich(s.short)} />
+              <p class="service__pressure">
+                <Icon name="sliders" /> <span><span class="visually-hidden">Pressure: </span>{s.pressure}</span>
+              </p>
+            </div>
+            <div class="service__detail">
+              <p class="prose" set:html={rich(s.description)} />
+              <div>
+                <h3 class="service__label">Good for</h3>
+                <ul role="list" class="chips">
+                  {s.goals.map((g) => <li class="chip" set:html={rich(g)} />)}
+                </ul>
+              </div>
+              <table class="service__prices">
+                <caption class="visually-hidden">{s.name} durations and prices</caption>
+                <thead class="visually-hidden">
+                  <tr><th scope="col">Length</th><th scope="col">Price</th></tr>
+                </thead>
+                <tbody>
+                  {s.durations.map((d) => (
+                    <tr>
+                      <th scope="row">{d.minutes} minutes</th>
+                      <td>{formatPrice(d.price)}{d.price === null && <span class="visually-hidden"> (to be confirmed)</span>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <a class="btn btn--primary" href={bookingHref()}>
+                Book this session <Icon name="arrow" class="arrow" />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Add-ons & packages -->
+  <section class="section section--alt" aria-labelledby="extras-title">
+    <div class="container">
+      <SectionHead
+        eyebrow="Extras"
+        title="Add-ons & *packages*"
+        lede="Optional extras to make a session your own, and packages for regular care."
+        id="extras-title"
+      >
+        <p><span class="draft-tag">Examples only — to confirm</span></p>
+      </SectionHead>
+      <div class="extras">
+        <div class="card extras__card" data-reveal>
+          <h3 class="h4">Add-ons</h3>
+          <ul role="list" class="extras__list">
+            {
+              addOns.map((a) => (
+                <li>
+                  <div>
+                    <p class="extras__name" set:html={rich(a.name)} />
+                    <p class="extras__detail" set:html={rich(a.detail)} />
+                  </div>
+                  <p class="extras__price" set:html={rich(a.price)} />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="card extras__card" data-reveal style="--reveal-delay: .1s">
+          <h3 class="h4">Packages</h3>
+          <ul role="list" class="extras__list">
+            {
+              packages.map((p) => (
+                <li>
+                  <div>
+                    <p class="extras__name" set:html={rich(p.name)} />
+                    <p class="extras__detail" set:html={rich(p.detail)} />
+                  </div>
+                  <p class="extras__price" set:html={rich(p.price)} />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Good to know -->
+  <section class="section" aria-labelledby="know-title">
+    <div class="container">
+      <SectionHead eyebrow="Good to know" title="Travel, booking & *policies*" id="know-title" />
+      <ul role="list" class="know">
+        <li class="know__item" data-reveal>
+          <Icon name="car" />
+          <h3 class="h4">Travel</h3>
+          <p set:html={rich(site.serviceArea.travelNote)} />
+        </li>
+        <li class="know__item" data-reveal style="--reveal-delay: .08s">
+          <Icon name="clock" />
+          <h3 class="h4">Session time</h3>
+          <p set:html={rich('[[Setup happens before your session starts and breakdown after it ends]], so you always get the full time you booked.')} />
+        </li>
+        <li class="know__item" data-reveal style="--reveal-delay: .16s">
+          <Icon name="calendar" />
+          <h3 class="h4">Cancellations</h3>
+          <p set:html={rich('[[Please give at least 24 hours’ notice to cancel or reschedule.]] Full details are in the FAQ.')} />
+          <a class="text-link" href={url('faq#booking')}>Booking FAQ <Icon name="arrow" class="arrow" /></a>
+        </li>
+        <li class="know__item" data-reveal style="--reveal-delay: .24s">
+          <Icon name="card" />
+          <h3 class="h4">Payment & tipping</h3>
+          <p set:html={rich('Payment is due [[at the end of your session]] — [[cards, Apple Pay, or Venmo]]. Tipping is [[appreciated, never expected]].')} />
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    eyebrow="Not sure which to choose?"
+    title="Start with *The Tailored Session*."
+    body="We’ll shape it around what you need once we talk. Or send a quick message and I’ll help you pick."
+  />
+</Layout>
+
+<style>
+  /* Included */
+  .included {
+    padding-top: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+
+  .included__inner {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem) clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--accent-wash);
+    border-radius: var(--radius);
+  }
+
+  .included__title {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .included__list {
+    display: grid;
+    gap: 0.85rem 2rem;
+  }
+
+  .included__list li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .included__list :global(.icon) {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+    color: var(--accent);
+    stroke-width: 1.6;
+  }
+
+  @media (min-width: 760px) {
+    .included__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .included__inner {
+      grid-template-columns: 12rem 1fr;
+      align-items: center;
+    }
+
+    .included__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Service list */
+  .service-list {
+    display: grid;
+  }
+
+  .service {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+    border-top: 1.5px dashed var(--line-strong);
+  }
+
+  .service:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .service__intro h2 {
+    font-size: calc(clamp(1.8rem, 1.4rem + 1.4vw, 2.5rem) * var(--display-scale));
+  }
+
+  .service__intro {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .service__short {
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-style: italic;
+    font-size: calc(1.25rem * var(--display-scale));
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 26rem;
+  }
+
+  .service__pressure {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+
+  .service__pressure :global(.icon) {
+    width: 1.15rem;
+    height: 1.15rem;
+    color: var(--accent);
+  }
+
+  .service__detail {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+
+  .service__label {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+    margin-bottom: 0.75rem;
+  }
+
+  .service__prices {
+    width: 100%;
+    max-width: 30rem;
+    border-collapse: collapse;
+  }
+
+  .service__prices th,
+  .service__prices td {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .service__prices tbody tr:first-child :is(th, td) {
+    border-top: 1px solid var(--line);
+  }
+
+  .service__prices th {
+    color: var(--ink-soft);
+  }
+
+  .service__prices td {
+    text-align: right;
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-size: calc(1.4rem * var(--display-scale));
+  }
+
+  @media (min-width: 900px) {
+    .service {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(3rem, 7vw, 7rem);
+    }
+
+    .service__intro {
+      position: sticky;
+      top: 7rem;
+    }
+  }
+
+  /* Extras */
+  .extras {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .extras__card {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .extras__list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 1.1rem;
+    border-top: 1px dashed var(--line);
+  }
+
+  .extras__name {
+    font-weight: 500;
+  }
+
+  .extras__detail {
+    color: var(--ink-soft);
+    font-size: 0.93rem;
+    margin-top: 0.2rem;
+  }
+
+  .extras__price {
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-size: calc(1.15rem * var(--display-scale));
+  }
+
+  @media (min-width: 820px) {
+    .extras {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Good to know */
+  .know {
+    display: grid;
+    gap: 2.5rem 2rem;
+  }
+
+  .know__item {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .know__item > :global(.icon) {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: var(--accent);
+  }
+
+  .know__item p {
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+  }
+
+  @media (min-width: 680px) {
+    .know {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .know {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

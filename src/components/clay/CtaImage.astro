@@ -1,0 +1,64 @@
+---
+/** Full-bleed photographic call to action (after the Indigo inspo). */
+import BleedImage from './BleedImage.astro';
+import { scenes } from '../../data/images';
+import { site } from '../../data/site';
+import { rich, bookingHref } from '../../lib/utils';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  image?: string;
+}
+const {
+  eyebrow = 'Whenever you’re ready',
+  title = 'An hour that’s *entirely yours*',
+  body = 'Call, text, or email to book — or just to ask a question first. There’s no such thing as too small a question.',
+  image = scenes.clay.corner.src,
+} = Astro.props;
+---
+
+<section class="bleed cta-img" aria-labelledby="cta-img-title">
+  <BleedImage src={image} />
+  <div class="container cta-img__inner" data-reveal>
+    <p class="eyebrow">{eyebrow}</p>
+    <h2 id="cta-img-title" set:html={rich(title)} />
+    <p class="lede" set:html={rich(body)} />
+    <div class="btn-row">
+      <a class="btn btn--light" href={bookingHref('clay')}>Book a session</a>
+      <a class="btn btn--ghost-light" href={site.contact.phoneHref}>Call or text</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-img {
+    display: grid;
+    align-items: center;
+    min-height: min(78vh, 46rem);
+    padding-block: 6rem;
+    text-align: center;
+  }
+
+  .cta-img__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+  }
+
+  .cta-img h2 {
+    max-width: 16ch;
+    font-size: clamp(2.1rem, 1.3rem + 3.4vw, 4.2rem);
+  }
+
+  .cta-img .lede {
+    margin-inline: auto;
+    max-width: 34rem;
+  }
+
+  .cta-img .btn-row {
+    justify-content: center;
+    margin-top: 0.75rem;
+  }
+</style>

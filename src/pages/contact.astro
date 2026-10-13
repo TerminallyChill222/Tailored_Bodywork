@@ -1,0 +1,281 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import { site } from '../data/site';
+import { images } from '../data/images';
+import { rich, url, mailtoHref } from '../lib/utils';
+
+const ways = [
+  { icon: 'phone', label: 'Call', value: site.contact.phone, href: site.contact.phoneHref, cta: 'Call now', primary: true },
+  { icon: 'message', label: 'Text', value: site.contact.phone, href: site.contact.smsHref, cta: 'Send a text' },
+  { icon: 'mail', label: 'Email', value: site.contact.email, href: mailtoHref(), cta: 'Write an email' },
+];
+
+const include = [
+  'The service and session length you’d like',
+  'Your neighborhood or ZIP code',
+  'A few days and times that work for you',
+  'Anything you’d like me to know beforehand',
+];
+---
+
+<Layout
+  title="Contact & Booking"
+  description={`Book an in-home bodywork session in ${site.city} by phone, text, or email. Serving ${site.serviceArea.summary}.`}
+>
+  <PageHeader
+    eyebrow="Contact & booking"
+    title="Let’s find a time that *works for you*"
+    lede="Booking is personal — call, text, or email, and I’ll find a time that fits your schedule. Questions are always welcome, too, especially before your first session."
+  />
+
+  <section class="section section--tight" id="book" aria-labelledby="book-title">
+    <div class="container contact">
+      <!-- How to book -->
+      <div class="booking card" data-reveal>
+        <p class="eyebrow">How to book</p>
+        <h2 id="book-title" class="h3">Call, text, or email</h2>
+        <p class="prose" set:html={rich('There’s no online calendar — every appointment is arranged with me directly. I’ll reply personally, usually within [[one business day]].')} />
+
+        <ul role="list" class="ways">
+          {
+            ways.map((w) => (
+              <li class="way">
+                <span class="icon-badge">
+                  <Icon name={w.icon} />
+                </span>
+                <div class="way__text">
+                  <p class="way__label">{w.label}</p>
+                  <p class="way__value" set:html={rich(`[[${w.value}]]`)} />
+                </div>
+                <a class:list={['btn', w.primary ? 'btn--primary' : 'btn--ghost']} href={w.href}>
+                  {w.cta}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="booking__include">
+          <p class="booking__include-title">Helpful to include</p>
+          <ul role="list">
+            {include.map((i) => <li><Icon name="check" /> {i}</li>)}
+          </ul>
+        </div>
+
+        <p class="booking__privacy">
+          <Icon name="shield" />
+          <span>Please don’t include health or medical details in a text or email. We’ll cover anything relevant on your intake form before your first session.</span>
+        </p>
+      </div>
+
+      <!-- Details -->
+      <div class="details" data-reveal style="--reveal-delay: .1s">
+        <div class="details__media">
+          <Photo src={images.eucalyptus.src} alt="" aspect="16 / 9" sizes="(min-width: 900px) 35vw, 100vw" position="center 30%" />
+        </div>
+        <dl class="details__list">
+          <div>
+            <dt><Icon name="pin" /> Service area</dt>
+            <dd>{site.serviceArea.summary} · <a href={url('faq#booking')}>see details</a></dd>
+          </div>
+          <div>
+            <dt><Icon name="clock" /> Availability</dt>
+            <dd>
+              <ul role="list" class="details__hours">
+                {site.hours.map((h) => <li><span>{h.days}</span> <span set:html={rich(h.time)} /></li>)}
+              </ul>
+            </dd>
+          </div>
+          <div>
+            <dt><Icon name="instagram" /> Social</dt>
+            <dd set:html={rich('[[@instagram handle]]')} />
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .contact {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .booking {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  /* Call / text / email rows */
+  .ways {
+    display: grid;
+    margin-block: 0.25rem;
+    border-top: 1px dashed var(--line-strong);
+  }
+
+  .way {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+
+  .way .icon-badge {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .way .icon-badge :global(.icon) {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .way__label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .way__value {
+    font-family: var(--font-display);
+    font-size: calc(1.3rem * var(--display-scale));
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .way .btn {
+    grid-column: 1 / -1;
+    min-height: 2.75rem;
+    padding: 0.65em 1.4em;
+  }
+
+  @media (min-width: 560px) {
+    .way {
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .way .btn {
+      grid-column: auto;
+    }
+  }
+
+  .booking__include {
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent-wash) 45%, var(--surface));
+  }
+
+  .booking__include-title {
+    margin-bottom: 0.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .booking__include ul {
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  .booking__include li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .booking__include :global(.icon) {
+    width: 1.05rem;
+    height: 1.05rem;
+    margin-top: 0.25rem;
+    color: var(--accent);
+    stroke-width: 1.7;
+  }
+
+  .booking__privacy {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .booking__privacy :global(.icon) {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+    color: var(--accent);
+  }
+
+  /* Details */
+  .details {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+
+  .details__list {
+    margin: 0;
+  }
+
+  .details__list > div {
+    display: grid;
+    gap: 0.3rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+
+  .details__list > div:first-child {
+    padding-top: 0;
+  }
+
+  .details__list dt {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .details__list dt :global(.icon) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .details__list dd {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .details__list a {
+    color: var(--ink);
+  }
+
+  .details__hours li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 22rem;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 900px) {
+    .contact {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+  }
+</style>

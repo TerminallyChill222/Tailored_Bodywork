@@ -1,0 +1,96 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { rich, bookingHref } from '../lib/utils';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+}
+const {
+  eyebrow = 'Whenever you’re ready',
+  title = 'An hour that’s entirely *yours*.',
+  body = 'Call, text, or email to book — or just to ask a question first. There’s no such thing as too small a question.',
+} = Astro.props;
+---
+
+<section class="cta-band" aria-labelledby="cta-title">
+  <div class="container">
+    <div class="cta-band__inner" data-reveal>
+      <svg class="cta-band__arc" viewBox="0 0 400 200" aria-hidden="true">
+        <path d="M10 200a190 190 0 0 1 380 0" />
+        <path d="M50 200a150 150 0 0 1 300 0" stroke-dasharray="2 6" />
+        <path d="M90 200a110 110 0 0 1 220 0" />
+      </svg>
+      <p class="eyebrow eyebrow--center">{eyebrow}</p>
+      <h2 id="cta-title" set:html={rich(title)} />
+      <p class="lede" set:html={rich(body)} />
+      <div class="btn-row">
+        <a class="btn btn--light" href={bookingHref()}>
+          Book a Session <Icon name="arrow" class="arrow" />
+        </a>
+        <a class="btn btn--ghost-light" href={site.contact.phoneHref}>Call or Text</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-band {
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem);
+  }
+
+  .cta-band__inner {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    text-align: center;
+    padding: clamp(3.5rem, 2.5rem + 5vw, 6.5rem) clamp(1.5rem, 5vw, 4rem);
+    background: var(--band);
+    color: var(--band-ink);
+    border-radius: var(--radius);
+  }
+
+  :global([data-theme='sage']) .cta-band__inner {
+    border-radius: clamp(2rem, 6vw, 4rem);
+  }
+
+  .cta-band h2 {
+    color: var(--band-ink);
+    max-width: 18ch;
+  }
+
+  .cta-band h2 :global(em) {
+    color: var(--band-soft);
+  }
+
+  .cta-band .eyebrow {
+    color: var(--band-soft);
+  }
+
+  .cta-band .lede {
+    color: var(--band-soft);
+    margin-inline: auto;
+  }
+
+  .cta-band .btn-row {
+    justify-content: center;
+    margin-top: 0.75rem;
+  }
+
+  .cta-band__arc {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: min(46rem, 120%);
+    transform: translateX(-50%);
+    fill: none;
+    stroke: var(--band-soft);
+    stroke-width: 0.8;
+    opacity: 0.22;
+    pointer-events: none;
+  }
+</style>

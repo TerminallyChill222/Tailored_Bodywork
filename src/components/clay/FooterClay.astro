@@ -1,0 +1,191 @@
+---
+/** Version B footer: charcoal, information columns, and an oversized wordmark. */
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { vurl, rich } from '../../lib/utils';
+
+const year = new Date().getFullYear();
+const links = [
+  { label: 'Home', href: '' },
+  { label: 'About', href: 'about' },
+  { label: 'Services & pricing', href: 'services' },
+  { label: 'The in-home experience', href: 'experience' },
+  { label: 'FAQ', href: 'faq' },
+  { label: 'Contact & booking', href: 'contact' },
+];
+---
+
+<footer class="fc">
+  <div class="container">
+    <div class="fc__grid">
+      <div class="fc__intro">
+        <p class="fc__statement">Personalized bodywork, <em>brought home</em>.</p>
+        <p>Professional, in-home sessions across {site.serviceArea.summary}.</p>
+      </div>
+
+      <div>
+        <h2 class="fc__heading">Explore</h2>
+        <ul role="list">
+          {links.map((l) => <li><a href={vurl('clay', l.href)}>{l.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="fc__heading">Contact</h2>
+        <ul role="list" class="fc__contact">
+          <li><Icon name="mail" /><a href={`mailto:${site.contact.email}`} set:html={rich(`[[${site.contact.email}]]`)} /></li>
+          <li><Icon name="phone" /><a href={site.contact.phoneHref} set:html={rich(`[[${site.contact.phone}]]`)} /></li>
+          <li><Icon name="instagram" /><span set:html={rich('[[@instagram handle]]')} /></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="fc__heading">Hours</h2>
+        <dl class="fc__hours">
+          {site.hours.map((h) => <div><dt>{h.days}</dt><dd set:html={rich(h.time)} /></div>)}
+        </dl>
+      </div>
+    </div>
+
+    <p class="fc__wordmark" aria-hidden="true">Tailored Bodywork</p>
+
+    <div class="fc__base">
+      <p>© {year} {site.name} · {site.city}, {site.region}</p>
+      <p class="draft-only">Draft site — highlighted text and photos are placeholders.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .fc {
+    background: var(--band);
+    color: var(--band-soft);
+    padding-block: clamp(4rem, 3rem + 4vw, 6.5rem) 2rem;
+    font-size: 0.92rem;
+    overflow: hidden;
+  }
+
+  .fc__grid {
+    display: grid;
+    gap: 3rem 2rem;
+  }
+
+  .fc__intro {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    max-width: 22rem;
+  }
+
+  .fc__statement {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    line-height: 1.2;
+    color: var(--band-ink);
+  }
+
+  .fc__statement em {
+    color: var(--accent-soft);
+  }
+
+  .fc__heading {
+    font-family: var(--font-body);
+    font-size: 0.66rem !important;
+    font-weight: 600;
+    letter-spacing: 0.28em !important;
+    color: var(--band-ink);
+    margin-bottom: 1.25rem;
+  }
+
+  .fc ul {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .fc a {
+    color: var(--band-soft);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  .fc a:hover {
+    color: var(--band-ink);
+  }
+
+  .fc__contact li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .fc__contact :global(.icon) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--accent-soft);
+  }
+
+  .fc__hours {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+  }
+
+  .fc__hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--band-soft) 20%, transparent);
+  }
+
+  .fc__hours dd {
+    margin: 0;
+    color: var(--band-ink);
+  }
+
+  .fc__hours :is(dt, dd) {
+    white-space: nowrap;
+  }
+
+  .fc :global(mark.ph) {
+    background: color-mix(in srgb, var(--band-ink) 14%, transparent);
+    color: var(--band-ink);
+    border-bottom-color: var(--band-soft);
+  }
+
+  .fc__wordmark {
+    margin: clamp(3.5rem, 6vw, 6rem) 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 9.2vw, 9.5rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    color: color-mix(in srgb, var(--band-ink) 88%, transparent);
+  }
+
+  .fc__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--band-soft) 22%, transparent);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+
+  @media (min-width: 700px) {
+    .fc__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .fc__grid {
+      grid-template-columns: 1.3fr 0.9fr 1.1fr 1.25fr;
+    }
+  }
+</style>

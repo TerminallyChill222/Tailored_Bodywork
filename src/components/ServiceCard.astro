@@ -1,0 +1,107 @@
+---
+import Icon from './Icon.astro';
+import type { Service } from '../data/services';
+import { rich, formatPrice, url } from '../lib/utils';
+
+interface Props {
+  service: Service;
+  index?: number;
+}
+const { service, index = 0 } = Astro.props;
+---
+
+<article class:list={['service-card', 'card', 'card--hover', { 'service-card--featured': service.featured }]} data-reveal style={`--reveal-delay: ${index * 0.08}s`}>
+  {service.featured && <p class="service-card__badge">Start here</p>}
+  <h3 set:html={rich(service.name)} />
+  <p class="service-card__short" set:html={rich(service.short)} />
+  <dl class="service-card__prices">
+    {
+      service.durations.map((d) => (
+        <div>
+          <dt>{d.minutes} min</dt>
+          <dd>
+            {formatPrice(d.price)}
+            {d.price === null && <span class="visually-hidden">(price to be confirmed)</span>}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+  <a class="text-link" href={url(`services#${service.slug}`)}>
+    Details <span class="visually-hidden">about {service.name}</span>
+    <Icon name="arrow" class="arrow" />
+  </a>
+</article>
+
+<style>
+  .service-card {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    grid-template-rows: auto auto 1fr auto;
+  }
+
+  .service-card h3 {
+    padding-right: 1rem;
+  }
+
+  .service-card__short {
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+
+  .service-card__prices {
+    display: grid;
+    gap: 0;
+    margin: 0.5rem 0 0.75rem;
+    align-self: end;
+  }
+
+  .service-card__prices div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-block: 0.6rem;
+    border-top: 1px dashed var(--line);
+  }
+
+  .service-card__prices dt {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+
+  .service-card__prices dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-size: calc(1.3rem * var(--display-scale));
+    color: var(--ink);
+  }
+
+  .service-card .text-link {
+    justify-self: start;
+  }
+
+  .service-card__badge {
+    position: absolute;
+    top: -0.8rem;
+    left: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-radius: var(--radius-chip);
+  }
+
+  .service-card--featured {
+    border-color: var(--accent-soft);
+  }
+
+  :global([data-theme='sage']) .service-card--featured {
+    background: color-mix(in srgb, var(--accent-wash) 55%, var(--surface));
+  }
+</style>

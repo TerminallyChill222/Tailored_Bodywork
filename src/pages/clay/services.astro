@@ -1,0 +1,593 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import BleedImage from '../../components/clay/BleedImage.astro';
+import CtaImage from '../../components/clay/CtaImage.astro';
+import { site } from '../../data/site';
+import { services, included, addOns, packages } from '../../data/services';
+import { images, scenes } from '../../data/images';
+import { rich, plain, formatPrice, vurl, bookingHref, pad } from '../../lib/utils';
+
+const from = (s: (typeof services)[number]) => formatPrice(s.durations[0]?.price ?? null);
+---
+
+<Layout
+  version="clay"
+  title="Services & Pricing"
+  description={`In-home bodywork sessions in ${site.city} with clear, upfront pricing. Choose 60, 90, or 120 minutes — every session tailored to you.`}
+>
+  <!-- Header band -->
+  <section class="bleed svc-hero" aria-labelledby="svc-title">
+    <BleedImage src={scenes.clay.towel.src} alt="" eager position="center 62%" />
+    <div class="container svc-hero__inner" data-reveal>
+      <p class="eyebrow">( Services & pricing )</p>
+      <h1 id="svc-title">Clear options, <em>tailored to you</em></h1>
+      <p class="lede">Every session adapts to your body on the day. Pricing is upfront, and everything you need comes with me.</p>
+      <p class="draft-only"><span class="draft-tag">Menu, durations & prices to confirm</span></p>
+    </div>
+  </section>
+
+  <!-- Included line -->
+  <section class="included" aria-labelledby="included-title">
+    <div class="container included__inner">
+      <h2 id="included-title" class="included__title">Every session includes</h2>
+      <ul role="list">
+        {included.map((item) => <li set:html={rich(item)} />)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Menu: sticky photo + accordion -->
+  <section class="section menu" aria-labelledby="menu-title">
+    <div class="container menu__grid">
+      <div class="menu__media" data-reveal>
+        <span class="vertical-label" aria-hidden="true">The menu</span>
+        <Photo src={images.supplies.src} alt={images.supplies.alt} shape="capsule" aspect="3 / 4.6" sizes="(min-width: 900px) 30vw, 70vw" />
+      </div>
+      <div class="menu__list">
+        <div class="menu__head" data-reveal>
+          <p class="index">( 01 ) — Sessions</p>
+          <h2 id="menu-title">Choose your <em>session</em></h2>
+        </div>
+        {
+          services.map((s, i) => (
+              <details class="item" id={s.slug} open={i === 0} data-reveal>
+                <summary>
+                  <span class="item__num">{pad(i + 1)}</span>
+                  <span class="item__name" set:html={rich(s.name)} />
+                  <span class="item__from">From {from(s)}</span>
+                  <span class="item__toggle" aria-hidden="true" />
+                </summary>
+                <div class="item__body">
+                  <p class="item__short" set:html={rich(s.short)} />
+                  <p class="item__desc" set:html={rich(s.description)} />
+                  <ul role="list" class="item__goals">
+                    {s.goals.map((g) => (
+                      <li>
+                        <Icon name="check" />
+                        <span set:html={rich(g)} />
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="item__pressure">
+                    Pressure <span>{s.pressure}</span>
+                  </p>
+                  <table class="item__prices">
+                    <caption class="visually-hidden">{plain(s.name)} durations and prices</caption>
+                    <tbody>
+                      {s.durations.map((d) => (
+                        <tr>
+                          <th scope="row">{d.minutes} minutes</th>
+                          <td>
+                            {formatPrice(d.price)}
+                            {d.price === null && <span class="visually-hidden"> (to be confirmed)</span>}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <a class="btn btn--primary" href={bookingHref('clay')}>
+                    Book this session
+                  </a>
+                </div>
+              </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Add-ons & packages: menu style -->
+  <section class="section section--alt extras" aria-labelledby="extras-title">
+    <div class="container">
+      <div class="extras__head" data-reveal>
+        <p class="index">( 02 ) — Extras</p>
+        <h2 id="extras-title">Add-ons & <em>packages</em></h2>
+        <p><span class="draft-tag">Examples only — to confirm</span></p>
+      </div>
+      <div class="extras__grid">
+        {
+          [
+            { title: 'Add-ons', list: addOns },
+            { title: 'Packages', list: packages },
+          ].map((col, ci) => (
+            <div class="extras__col" data-reveal style={`--reveal-delay: ${ci * 0.1}s`}>
+              <h3 class="extras__title">{col.title}</h3>
+              <ul role="list">
+                {col.list.map((x) => (
+                  <li>
+                    <p class="extras__row">
+                      <span class="extras__name" set:html={rich(x.name)} />
+                      <span class="extras__leader" aria-hidden="true" />
+                      <span class="extras__price" set:html={rich(x.price)} />
+                    </p>
+                    <p class="extras__detail" set:html={rich(x.detail)} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Good to know -->
+  <section class="section know" aria-labelledby="know-title">
+    <div class="container">
+      <div class="know__head" data-reveal>
+        <p class="index">( 03 ) — Good to know</p>
+        <h2 id="know-title">Travel, booking & <em>policies</em></h2>
+      </div>
+      <ol role="list" class="know__grid">
+        <li data-reveal>
+          <span class="numeral">i.</span>
+          <h3 class="h4">Travel</h3>
+          <p set:html={rich(site.serviceArea.travelNote)} />
+        </li>
+        <li data-reveal style="--reveal-delay:.08s">
+          <span class="numeral">ii.</span>
+          <h3 class="h4">Session time</h3>
+          <p set:html={rich('[[Setup happens before your session starts and breakdown after it ends]], so you always get the full time you booked.')} />
+        </li>
+        <li data-reveal style="--reveal-delay:.16s">
+          <span class="numeral">iii.</span>
+          <h3 class="h4">Cancellations</h3>
+          <p set:html={rich('[[Please give at least 24 hours’ notice to cancel or reschedule.]]')} />
+          <a class="text-link" href={vurl('clay', 'faq#booking')}>Booking FAQ <Icon name="arrow" class="arrow" /></a>
+        </li>
+        <li data-reveal style="--reveal-delay:.24s">
+          <span class="numeral">iv.</span>
+          <h3 class="h4">Payment & tipping</h3>
+          <p set:html={rich('Payment is due [[at the end of your session]] — [[cards, Apple Pay, or Venmo]]. Tipping is [[appreciated, never expected]].')} />
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <CtaImage
+    eyebrow="Not sure which to choose?"
+    title="Start with *The Tailored Session*"
+    body="We’ll shape it around what you need once we talk — or send a quick message and I’ll help you pick."
+    image={images.terracotta.src}
+  />
+</Layout>
+
+<style>
+  /* Hero band */
+  .svc-hero {
+    display: grid;
+    align-items: center;
+    min-height: min(64vh, 38rem);
+    padding-block: 6rem;
+    text-align: center;
+  }
+
+  .svc-hero__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+  }
+
+  .svc-hero h1 {
+    max-width: 14ch;
+  }
+
+  .svc-hero h1 em {
+    display: block;
+  }
+
+  .svc-hero .lede {
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  /* Included */
+  .included {
+    background: var(--band);
+    color: var(--band-ink);
+  }
+
+  .included__inner {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1.5rem;
+  }
+
+  .included__title {
+    font-family: var(--font-body);
+    font-size: 0.66rem !important;
+    font-weight: 600;
+    letter-spacing: 0.26em !important;
+    color: var(--accent-soft);
+  }
+
+  .included ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0;
+    font-size: 0.9rem;
+    color: var(--band-soft);
+  }
+
+  .included li:not(:last-child)::after {
+    content: '·';
+    margin-inline: 0.85rem;
+    color: var(--accent-soft);
+  }
+
+  .included :global(mark.ph) {
+    background: color-mix(in srgb, var(--band-ink) 14%, transparent);
+    color: var(--band-ink);
+  }
+
+  @media (min-width: 1000px) {
+    .included__inner {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 2.5rem;
+    }
+  }
+
+  /* Menu */
+  .menu__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .menu__media {
+    display: none;
+  }
+
+  .menu__head {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .item {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .item:last-of-type {
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .item summary {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .item__num {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--eyebrow);
+  }
+
+  .item__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.3rem);
+    line-height: 1.1;
+    transition: color 0.25s ease;
+  }
+
+  .item summary:hover .item__name {
+    color: var(--accent);
+  }
+
+  .item[open] .item__name {
+    font-style: italic;
+  }
+
+  .item__from {
+    grid-column: 2;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .item__toggle {
+    grid-column: 3;
+    grid-row: 1;
+    position: relative;
+    width: 1rem;
+    height: 1rem;
+    align-self: center;
+  }
+
+  .item__toggle::before,
+  .item__toggle::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--ink);
+    transition: transform 0.3s ease;
+  }
+
+  .item__toggle::after {
+    transform: rotate(90deg);
+  }
+
+  .item[open] .item__toggle::after {
+    transform: rotate(0deg);
+  }
+
+  .item__body {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    padding: 0 0 2rem 3.25rem;
+  }
+
+  .item[open] .item__body {
+    animation: item-in 0.45s ease;
+  }
+
+  @keyframes item-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  .item__short {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.35;
+  }
+
+  .item__desc {
+    color: var(--ink-soft);
+    max-width: 36rem;
+  }
+
+  .item__goals {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.93rem;
+    color: var(--ink-soft);
+  }
+
+  .item__goals li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .item__goals :global(.icon) {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.3rem;
+    color: var(--accent);
+    stroke-width: 1.7;
+  }
+
+  .item__pressure {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .item__pressure span {
+    margin-left: 0.6rem;
+    font-size: 0.92rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink);
+  }
+
+  .item__prices {
+    width: 100%;
+    max-width: 26rem;
+    border-collapse: collapse;
+  }
+
+  .item__prices th,
+  .item__prices td {
+    padding: 0.7rem 0;
+    border-bottom: 1px dotted var(--line-strong);
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .item__prices th {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  .item__prices td {
+    text-align: right;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+  }
+
+  @media (min-width: 900px) {
+    .menu__grid {
+      grid-template-columns: 0.7fr 1.3fr;
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: start;
+    }
+
+    .menu__media {
+      position: sticky;
+      top: 8rem;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      align-items: end;
+    }
+
+    .menu__media .vertical-label {
+      color: var(--ink-soft);
+    }
+
+    .item summary {
+      grid-template-columns: 3rem 1fr auto auto;
+    }
+
+    .item__from {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .item__toggle {
+      grid-column: 4;
+      margin-left: 1rem;
+    }
+
+    .item__body {
+      padding-left: 3.75rem;
+    }
+  }
+
+  /* Extras */
+  .extras__head {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .extras__grid {
+    display: grid;
+    gap: 3rem 5rem;
+  }
+
+  .extras__title {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .extras__col ul {
+    display: grid;
+  }
+
+  .extras__col li {
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .extras__row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .extras__name {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+  }
+
+  .extras__leader {
+    border-bottom: 1px dotted var(--line-strong);
+    transform: translateY(-0.3rem);
+  }
+
+  .extras__price {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    white-space: nowrap;
+  }
+
+  .extras__detail {
+    margin-top: 0.3rem;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 900px) {
+    .extras__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* Know */
+  .know__head {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .know__grid {
+    display: grid;
+    gap: 2.5rem 2rem;
+  }
+
+  .know__grid li {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+    justify-items: start;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .know__grid .numeral {
+    font-size: 1.6rem;
+  }
+
+  .know__grid p {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  @media (min-width: 680px) {
+    .know__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .know__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+/**
+ * A photo slot. Pass `src` for an image, or leave it empty to show a labeled
+ * placeholder frame describing the photo that belongs there.
+ *
+ * Shapes: plain (theme radius) · feature (arch) · circle · capsule (tall oval) · rect (square corners)
+ */
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { imgSrc, imgSrcset, isStock } from '../lib/utils';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  label?: string;
+  shape?: 'feature' | 'plain' | 'circle' | 'capsule' | 'rect';
+  aspect?: string;
+  sizes?: string;
+  eager?: boolean;
+  position?: string;
+  class?: string;
+  /** Stock image standing in for real photography. Adds a small "Placeholder" tag in draft mode. Defaults to true for hotlinked stock photos. */
+  stock?: boolean;
+}
+
+const {
+  src,
+  alt = '',
+  label,
+  shape = 'plain',
+  aspect = '4 / 5',
+  sizes = '(min-width: 900px) 50vw, 100vw',
+  eager = false,
+  position = 'center',
+  class: className = '',
+  stock = isStock(Astro.props.src),
+} = Astro.props;
+---
+
+<figure
+  class:list={['photo', `photo--${shape}`, className, { 'photo--empty': !src }]}
+  style={`--aspect: ${aspect}; --position: ${position};`}
+>
+  <div class="photo__frame">
+    {
+      src ? (
+        <img
+          src={imgSrc(src)}
+          srcset={imgSrcset(src)}
+          sizes={sizes}
+          alt={alt}
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : undefined}
+          decoding="async"
+        />
+      ) : (
+        <div class="photo__placeholder" role="img" aria-label={alt || label || 'Photo coming soon'}>
+          <Icon name="camera" />
+          {label && <span>{label}</span>}
+        </div>
+      )
+    }
+    {src && stock && site.flags.draft && <span class="photo__tag draft-only">Placeholder photo</span>}
+  </div>
+</figure>
+
+<style>
+  .photo {
+    position: relative;
+    margin: 0;
+  }
+
+  .photo__frame {
+    position: relative;
+    aspect-ratio: var(--aspect);
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--bg-alt);
+    isolation: isolate;
+  }
+
+  .photo__frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--position);
+    transition: transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .photo:hover .photo__frame img {
+    transform: scale(1.03);
+  }
+
+  .photo--feature .photo__frame {
+    border-radius: var(--radius-feature);
+  }
+
+  .photo--circle .photo__frame {
+    border-radius: 50%;
+  }
+
+  .photo--capsule .photo__frame {
+    border-radius: 999px;
+  }
+
+  .photo--rect .photo__frame {
+    border-radius: 0;
+  }
+
+  .photo__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.9rem;
+    padding: 2rem;
+    text-align: center;
+    color: var(--ph-ink);
+    background:
+      radial-gradient(120% 80% at 20% 0%, color-mix(in srgb, var(--surface) 70%, transparent), transparent 60%),
+      linear-gradient(160deg, var(--accent-wash), var(--bg-alt));
+    border: 1px dashed var(--ph-line);
+    border-radius: inherit;
+  }
+
+  .photo__placeholder span {
+    max-width: 18rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+  }
+
+  .photo__placeholder :global(.icon) {
+    width: 2rem;
+    height: 2rem;
+    opacity: 0.8;
+  }
+
+  .photo__tag {
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    z-index: 2;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.78);
+    color: #3b3b33;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+  }
+
+  .photo--feature .photo__tag,
+  .photo--capsule .photo__tag {
+    right: 50%;
+    top: 1.5rem;
+    transform: translateX(50%);
+  }
+</style>

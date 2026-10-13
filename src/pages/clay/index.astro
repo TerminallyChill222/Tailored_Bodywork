@@ -1,0 +1,638 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import Icon from '../../components/Icon.astro';
+import BleedImage from '../../components/clay/BleedImage.astro';
+import ServiceTabs from '../../components/clay/ServiceTabs.astro';
+import StripGallery from '../../components/clay/StripGallery.astro';
+import QuoteBand from '../../components/clay/QuoteBand.astro';
+import CtaImage from '../../components/clay/CtaImage.astro';
+import { site } from '../../data/site';
+import { services } from '../../data/services';
+import { steps } from '../../data/experience';
+import { intro } from '../../data/about';
+import { images, scenes, practitioner } from '../../data/images';
+import { vurl, rich, bookingHref, pad } from '../../lib/utils';
+
+const minutes = services.flatMap((s) => s.durations.map((d) => d.minutes));
+const facts = [
+  { big: `${Math.min(...minutes)}–${Math.max(...minutes)}`, label: 'Minute sessions' },
+  { big: '1', label: 'Practitioner — the same person every visit' },
+  { big: '0', label: 'Miles for you to drive' },
+  { big: 'Fresh', label: 'Linens for every client' },
+];
+
+const assurances = [
+  '[[A personal text to confirm the day before]], and another when I’m on my way',
+  'I step out while you get settled, and knock before coming back in',
+  'Professional draping throughout — only the area being worked on is uncovered',
+  'You can adjust, skip, or pause anything, at any time',
+];
+
+const strips = [
+  { label: 'Fresh linens', src: images.linens.src },
+  { label: 'Your pace', src: images.morning.src },
+  { label: 'Quiet & unhurried', src: images.leafShadow.src },
+  { label: 'Nowhere to be', src: images.terracotta.src },
+];
+---
+
+<Layout version="clay" image={scenes.clay.corner.src}>
+  <!-- Hero: full-bleed photograph, centered caps headline -->
+  <section class="bleed hero" aria-labelledby="hero-title">
+    <BleedImage src={scenes.clay.corner.src} alt={scenes.clay.corner.alt} eager position="center 65%" />
+    <div class="container hero__inner">
+      <p class="eyebrow" data-reveal>Mobile bodywork — {site.city}, {site.region}</p>
+      <h1 id="hero-title" data-reveal style="--reveal-delay:.08s">
+        Personalized bodywork <em>in the comfort of your home</em>
+      </h1>
+      <p class="lede" data-reveal style="--reveal-delay:.16s">
+        Skilled, attentive sessions shaped around your body and your day — with a professional table, fresh linens,
+        and everything else brought to your door.
+      </p>
+      <div class="btn-row" data-reveal style="--reveal-delay:.24s">
+        <a class="btn btn--light" href={bookingHref('clay')}>Book a session</a>
+        <a class="btn btn--ghost-light" href="#how">How it works</a>
+      </div>
+    </div>
+    <span class="vertical-label hero__side" aria-hidden="true">In-home sessions · {site.city}, CO</span>
+    <a class="hero__scroll" href="#approach" aria-label="Scroll to learn more"><span></span></a>
+  </section>
+
+  <!-- Approach statement -->
+  <section class="section approach" id="approach" aria-labelledby="approach-title">
+    <div class="container container--narrow approach__inner" data-reveal>
+      <p class="index">( 01 ) — Our approach</p>
+      <h2 id="approach-title" class="sc approach__statement">
+        Skilled, unhurried bodywork — shaped around your body, and brought to the place you feel <em>most at ease</em>.
+      </h2>
+      <p class="prose">
+        No commute before, no traffic after. Every session starts with a conversation about how you’re feeling, and
+        adapts as we go — so the work fits you, not a routine.
+      </p>
+      <a class="btn btn--ghost" href="#how">See how it works</a>
+    </div>
+  </section>
+
+  <!-- Facts band -->
+  <section class="facts" aria-label="At a glance">
+    <ul role="list" class="container facts__list">
+      {
+        facts.map((f, i) => (
+          <li data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+            <span class="facts__big">{f.big}</span>
+            <span class="facts__label">{f.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Meet Torey -->
+  <section class="section meet" aria-labelledby="meet-title">
+    <div class="container meet__grid">
+      <div class="meet__text" data-reveal>
+        <p class="index">( 02 ) — Your practitioner</p>
+        <h2 id="meet-title">Hi, I’m <em>{site.practitioner.firstName}</em></h2>
+        <p class="meet__sub">I’ll be the one at your door — and I’m glad you’re here.</p>
+        <p class="prose" set:html={rich(intro.short)} />
+        <ul role="list" class="meet__facts">
+          {intro.highlights.map((h) => <li set:html={rich(h)} />)}
+        </ul>
+        <div class="btn-row">
+          <a class="btn btn--primary" href={vurl('clay', 'about')}>More about {site.practitioner.firstName}</a>
+          <a class="text-link" href={vurl('clay', 'experience')}>What to expect <Icon name="arrow" class="arrow" /></a>
+        </div>
+      </div>
+      <div class="meet__collage" data-reveal style="--reveal-delay: .12s">
+        <div class="meet__main">
+          <Photo src={practitioner.headshot.src} alt={practitioner.headshot.alt} label={practitioner.headshot.label} shape="rect" aspect="4 / 5" stock={false} sizes="(min-width: 900px) 35vw, 80vw" />
+        </div>
+        <div class="meet__small">
+          <Photo src={practitioner.casual.src} alt={practitioner.casual.alt} label="Casual photo of Torey" shape="capsule" aspect="3 / 4.4" stock={false} sizes="220px" />
+        </div>
+        <svg class="meet__badge" viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="badge-circle" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1 -92 0" /></defs>
+          <circle cx="60" cy="60" r="58" />
+          <text><textPath href="#badge-circle" textLength="286" lengthAdjust="spacing">Personalized · In-home · Denver ·</textPath></text>
+          <path class="meet__badge-sun" d="M44 68a16 16 0 0 1 32 0M40 68h40" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <ServiceTabs index="03" />
+
+  <!-- How it works (stone) -->
+  <section class="section section--stone how" id="how" aria-labelledby="how-title">
+    <div class="container how__grid">
+      <div class="how__media" data-reveal>
+        <Photo src={scenes.clay.session.src} alt={scenes.clay.session.alt} position="center 40%" shape="capsule" aspect="3 / 4.6" sizes="(min-width: 900px) 30vw, 70vw" />
+      </div>
+      <div class="how__content">
+        <div class="how__head" data-reveal>
+          <p class="index">( 04 ) — How it works</p>
+          <h2 id="how-title">Simple from <em>start to finish</em></h2>
+        </div>
+        <ol role="list" class="how__steps">
+          {
+            steps.map((s, i) => (
+              <li data-reveal style={`--reveal-delay: ${i * 0.06}s`}>
+                <span class="numeral how__num">{pad(i + 1)}</span>
+                <div>
+                  <h3 class="h4">{s.title}</h3>
+                  <p set:html={rich(s.body)} />
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <a class="btn btn--ghost-light" href={vurl('clay', 'experience')} data-reveal>Read the full in-home experience</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- In-home experience + strips -->
+  <section class="section exp" aria-labelledby="exp-title">
+    <div class="container">
+      <div class="exp__head">
+        <div data-reveal>
+          <p class="index">( 05 ) — The in-home experience</p>
+          <h2 id="exp-title">Your home, <em>set for rest</em></h2>
+        </div>
+        <div class="exp__copy" data-reveal style="--reveal-delay: .1s">
+          <p class="lede">
+            Inviting someone into your home is a big deal. Every part of a session is designed so you feel informed,
+            comfortable, and in control.
+          </p>
+          <ul role="list" class="exp__list">
+            {assurances.map((a) => <li><Icon name="check" /><span set:html={rich(a)} /></li>)}
+          </ul>
+        </div>
+      </div>
+      <StripGallery items={strips} />
+    </div>
+  </section>
+
+  <QuoteBand index="06" />
+
+  <!-- Service area -->
+  <section class="area" aria-labelledby="area-title">
+    <div class="bleed area__band">
+      <BleedImage src={images.denver.src} alt={images.denver.alt} position="center 40%" />
+      <div class="container area__band-inner" data-reveal>
+        <p class="eyebrow">( 07 ) — Service area</p>
+        <h2 id="area-title">Serving <em>Denver</em></h2>
+      </div>
+    </div>
+    <div class="container area__info" data-reveal>
+      <p class="area__hoods">
+        {site.serviceArea.neighborhoods.map((n, i) => <span>{n}{i < site.serviceArea.neighborhoods.length - 1 && <span class="area__dot" aria-hidden="true"> · </span>}</span>)}
+      </p>
+      <p class="area__note">
+        <span class="draft-tag">Example list</span>
+        <span set:html={rich(site.serviceArea.travelNote)} /> Not sure if you’re in range? <a href={vurl('clay', 'contact')}>Send a quick message</a>.
+      </p>
+    </div>
+  </section>
+
+  <CtaImage image={images.leafShadow.src} />
+</Layout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    display: grid;
+    align-items: center;
+    min-height: min(92vh, 60rem);
+    padding-block: 7rem 8rem;
+    text-align: center;
+  }
+
+  .hero::after {
+    background: linear-gradient(180deg, rgb(30 28 26 / 0.45), rgb(30 28 26 / 0.35) 45%, rgb(30 28 26 / 0.6));
+  }
+
+  .hero__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+  }
+
+  .hero h1 {
+    max-width: 15ch;
+  }
+
+  .hero h1 em {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.62em;
+    color: var(--band-ink);
+  }
+
+  .hero .lede {
+    max-width: 36rem;
+    margin-inline: auto;
+    color: color-mix(in srgb, var(--band-ink) 90%, transparent);
+  }
+
+  .hero .btn-row {
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .hero__side {
+    position: absolute;
+    right: clamp(1rem, 2.5vw, 2rem);
+    bottom: 3rem;
+    color: var(--band-ink);
+    opacity: 0.85;
+    display: none;
+  }
+
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.75rem;
+    width: 1px;
+    height: 3.5rem;
+    background: color-mix(in srgb, var(--band-ink) 35%, transparent);
+    overflow: hidden;
+  }
+
+  .hero__scroll span {
+    position: absolute;
+    inset: 0;
+    background: var(--band-ink);
+    animation: scroll-cue 2.4s ease-in-out infinite;
+  }
+
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero__side {
+      display: block;
+    }
+  }
+
+  /* ---------- Approach ---------- */
+  .approach__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1.75rem;
+    text-align: center;
+  }
+
+  .approach__statement {
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.9rem);
+    line-height: 1.25;
+  }
+
+  .approach .prose {
+    max-width: 34rem;
+    margin-inline: auto;
+  }
+
+  /* ---------- Facts ---------- */
+  .facts {
+    background: var(--band);
+    color: var(--band-ink);
+  }
+
+  .facts__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .facts__list li {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 0.6rem;
+    padding: 2.25rem 0.75rem;
+    text-align: center;
+  }
+
+  .facts__big {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.5rem + 1.6vw, 2.75rem);
+    line-height: 1;
+  }
+
+  .facts__label {
+    max-width: 14rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    line-height: 1.6;
+    text-transform: uppercase;
+    color: var(--band-soft);
+  }
+
+  @media (max-width: 899px) {
+    .facts__list li:nth-child(odd) {
+      border-right: 1px solid color-mix(in srgb, var(--band-soft) 22%, transparent);
+    }
+
+    .facts__list li:nth-child(-n + 2) {
+      border-bottom: 1px solid color-mix(in srgb, var(--band-soft) 22%, transparent);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .facts__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .facts__list li {
+      padding-block: 3rem;
+    }
+
+    .facts__list li + li {
+      border-left: 1px solid color-mix(in srgb, var(--band-soft) 22%, transparent);
+    }
+  }
+
+  /* ---------- Meet ---------- */
+  .meet {
+    background: var(--accent-wash);
+  }
+
+  .meet__grid {
+    display: grid;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .meet__text {
+    display: grid;
+    gap: 1.35rem;
+    justify-items: start;
+  }
+
+  .meet__sub {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.4;
+  }
+
+  .meet__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .meet__facts li:not(:last-child)::after {
+    content: '/';
+    margin-inline: 0.85rem;
+    color: var(--accent);
+  }
+
+  .meet .btn-row {
+    align-items: center;
+    gap: 1.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .meet__collage {
+    position: relative;
+    width: 100%;
+    max-width: 32rem;
+    justify-self: center;
+    padding: 0 0 4rem 3.5rem;
+  }
+
+  .meet__small {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 38%;
+    padding: 0.5rem;
+    background: var(--accent-wash);
+    border-radius: 999px;
+  }
+
+  .meet__badge {
+    position: absolute;
+    right: -0.25rem;
+    top: -1.75rem;
+    width: 7.5rem;
+    height: 7.5rem;
+    animation: spin 40s linear infinite;
+  }
+
+  .meet__badge circle {
+    fill: var(--surface);
+    stroke: var(--line-strong);
+  }
+
+  .meet__badge text {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    fill: var(--ink);
+  }
+
+  .meet__badge-sun {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .meet__badge {
+      right: -1.25rem;
+    }
+
+    .meet__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 8vw, 8rem);
+    }
+  }
+
+  /* ---------- How (stone) ---------- */
+  .how__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .how__media {
+    max-width: 22rem;
+    width: 70%;
+    justify-self: center;
+  }
+
+  .how__content {
+    display: grid;
+    gap: 2rem;
+    justify-items: start;
+  }
+
+  .how__head {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .how .index {
+    color: var(--stone-accent);
+  }
+
+  .how__steps {
+    width: 100%;
+    border-top: 1px solid color-mix(in srgb, var(--stone-soft) 35%, transparent);
+  }
+
+  .how__steps li {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: 1rem;
+    padding-block: 1.5rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--stone-soft) 35%, transparent);
+  }
+
+  .how__num {
+    font-size: 2.6rem;
+    color: var(--stone-accent);
+  }
+
+  .how__steps h3 {
+    margin-bottom: 0.4rem;
+  }
+
+  .how__steps p {
+    font-size: 0.97rem;
+  }
+
+  @media (min-width: 900px) {
+    .how__grid {
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: clamp(3rem, 8vw, 8rem);
+      align-items: start;
+    }
+
+    .how__media {
+      position: sticky;
+      top: 8rem;
+      width: 100%;
+    }
+  }
+
+  /* ---------- Experience ---------- */
+  .exp__head {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .exp__head > div:first-child {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .exp__copy {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .exp__list {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .exp__list li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    color: var(--ink-soft);
+  }
+
+  .exp__list :global(.icon) {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.25rem;
+    color: var(--accent);
+    stroke-width: 1.6;
+  }
+
+  @media (min-width: 900px) {
+    .exp__head {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 8vw, 8rem);
+    }
+  }
+
+  /* ---------- Area ---------- */
+  .area__band {
+    display: grid;
+    align-items: center;
+    min-height: min(60vh, 34rem);
+    padding-block: 5rem;
+    text-align: center;
+  }
+
+  .area__band-inner {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+
+  .area__band h2 {
+    font-size: clamp(2.6rem, 1.5rem + 5vw, 6rem);
+  }
+
+  .area__info {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    padding-block: clamp(2.5rem, 2rem + 2vw, 4rem);
+    text-align: center;
+  }
+
+  .area__hoods {
+    max-width: 58rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1rem + 0.6vw, 1.5rem);
+    line-height: 1.7;
+  }
+
+  .area__dot {
+    color: var(--accent);
+  }
+
+  .area__note {
+    max-width: 40rem;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    line-height: 2;
+  }
+
+  .area__note .draft-tag {
+    margin-right: 0.4rem;
+  }
+
+  .area__note a {
+    color: var(--accent);
+  }
+</style>

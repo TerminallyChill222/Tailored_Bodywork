@@ -1,0 +1,200 @@
+/*
+ * Version B ("clay") base styles — editorial caps headlines, square buttons, stone & charcoal blocks.
+ * Everything is scoped to [data-theme='clay'] so Version A is unaffected.
+ */
+
+[data-theme='clay'] body {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+[data-theme='clay'] :is(h1, h2, .h1, .h2) {
+  text-transform: uppercase;
+  letter-spacing: var(--caps-tracking);
+  line-height: 1.02;
+}
+
+[data-theme='clay'] :is(h1, h2, .h1, .h2) em {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+[data-theme='clay'] h1,
+[data-theme='clay'] .h1 {
+  font-size: clamp(2.8rem, 1.4rem + 5.4vw, 6.4rem);
+}
+
+[data-theme='clay'] h2,
+[data-theme='clay'] .h2 {
+  font-size: clamp(2.1rem, 1.4rem + 2.8vw, 3.7rem);
+}
+
+[data-theme='clay'] h3,
+[data-theme='clay'] .h3 {
+  font-size: clamp(1.55rem, 1.3rem + 0.9vw, 2.05rem);
+  line-height: 1.15;
+}
+
+[data-theme='clay'] .sc {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+[data-theme='clay'] .eyebrow {
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+[data-theme='clay'] .eyebrow::before,
+[data-theme='clay'] .eyebrow--center::after {
+  display: none;
+}
+
+[data-theme='clay'] .lede {
+  font-size: clamp(1.02rem, 0.95rem + 0.3vw, 1.15rem);
+}
+
+/* Buttons: square, outlined, uppercase */
+[data-theme='clay'] .btn {
+  min-height: 3.1rem;
+  padding: 0.95em 2em;
+}
+
+[data-theme='clay'] .btn--ghost {
+  --btn-border: var(--ink);
+}
+
+[data-theme='clay'] .btn--ghost:hover {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--bg);
+}
+
+[data-theme='clay'] .btn--ghost-light:hover {
+  --btn-bg: var(--band-ink);
+  --btn-fg: var(--band);
+}
+
+/* ---------- Clay-only helpers ---------- */
+.section--stone {
+  background: var(--stone);
+  color: var(--stone-ink);
+}
+
+.section--stone :is(h1, h2, h3, h4) {
+  color: var(--stone-ink);
+}
+
+.section--stone :is(.eyebrow, .lede, .prose, p) {
+  color: var(--stone-soft);
+}
+
+.section--stone :is(h1, h2, h3) em {
+  color: var(--stone-accent);
+}
+
+.section--stone mark.ph,
+.section--band mark.ph {
+  background: color-mix(in srgb, var(--band-ink) 14%, transparent);
+  color: var(--band-ink);
+  border-bottom-color: var(--band-soft);
+}
+
+.section--band :is(h1, h2, h3) em {
+  color: var(--accent-soft);
+}
+
+/* Small "( 01 )" index labels */
+.index {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--eyebrow);
+}
+
+/* Large italic numerals */
+.numeral {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--emphasis);
+}
+
+/* Rotated text running bottom-to-top */
+.vertical-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Full-bleed image with a soft charcoal scrim */
+.bleed {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--band-ink);
+}
+
+.bleed__img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bleed::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgb(30 28 26 / 0.35), rgb(30 28 26 / 0.55));
+}
+
+.bleed :is(h1, h2, h3) {
+  color: var(--band-ink);
+}
+
+.bleed :is(h1, h2) em {
+  color: var(--band-ink);
+}
+
+.bleed .eyebrow,
+.bleed .lede {
+  color: var(--band-ink);
+}
+
+.bleed mark.ph {
+  background: rgb(255 255 255 / 0.18);
+  color: var(--band-ink);
+}
+
+.bleed__tag {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.78);
+  color: #3b3b33;
+}
+
+/* Editorial underline-only form fields */
+.field--line :is(input, select, textarea) {
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+  padding-inline: 0;
+}

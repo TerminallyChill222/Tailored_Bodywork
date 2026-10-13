@@ -1,0 +1,243 @@
+---
+/** Editorial services list (after the Yoga Club inspo): names on the left, the selected service on the right. */
+import Photo from '../Photo.astro';
+import Icon from '../Icon.astro';
+import { services } from '../../data/services';
+import { serviceImages } from '../../data/images';
+import { rich, plain, formatPrice, vurl, pad } from '../../lib/utils';
+
+interface Props {
+  index?: string;
+}
+const { index = '03' } = Astro.props;
+---
+
+<section class="section st" aria-labelledby="st-title">
+  <div class="container st__grid" data-tabs>
+    <div class="st__intro" data-reveal>
+      <p class="index">( {index} ) — Services</p>
+      <h2 id="st-title">Sessions, <em>tailored</em></h2>
+      <p class="st__lede">Four starting points, each adjusted to your body on the day.</p>
+      <div class="st__list" role="tablist" aria-orientation="vertical" aria-label="Services">
+        {
+          services.map((s, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`st-tab-${s.slug}`}
+              aria-controls={`st-panel-${s.slug}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              <span class="st__num">{pad(i + 1)}</span>
+              <span class="st__name" set:html={rich(s.name)} />
+              <Icon name="arrow" class="st__arrow" />
+            </button>
+          ))
+        }
+      </div>
+      <a class="text-link" href={vurl('clay', 'services')}>Full menu & pricing <Icon name="arrow" class="arrow" /></a>
+    </div>
+
+    <div class="st__panels" data-reveal style="--reveal-delay: .12s">
+      {
+        services.map((s, i) => {
+          const img = serviceImages[s.slug];
+          return (
+            <div class="st__panel" role="tabpanel" id={`st-panel-${s.slug}`} aria-labelledby={`st-tab-${s.slug}`} hidden={i !== 0}>
+              <div class="st__media">
+                <span class="vertical-label" aria-hidden="true">{plain(s.name)}</span>
+                <Photo src={img?.src} alt={img?.alt} aspect="4 / 5" shape="rect" sizes="(min-width: 900px) 40vw, 100vw" />
+              </div>
+              <div class="st__body">
+                <p class="st__short" set:html={rich(s.short)} />
+                <p class="st__desc" set:html={rich(s.description)} />
+                <p class="st__durations">
+                  {s.durations.map((d) => (
+                    <span>
+                      {d.minutes} min <b>{formatPrice(d.price)}</b>
+                    </span>
+                  ))}
+                </p>
+                <a class="btn btn--ghost" href={vurl('clay', `services#${s.slug}`)}>
+                  Details <span class="visually-hidden">about {plain(s.name)}</span>
+                </a>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/tabs';
+</script>
+
+<style>
+  .st__grid {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .st__intro {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .st__lede {
+    color: var(--ink-soft);
+    max-width: 24rem;
+  }
+
+  .st__list {
+    display: grid;
+    width: 100%;
+    margin-block: 1rem 0.5rem;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .st__list button {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: baseline;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1.1rem 0;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    color: var(--ink-faint);
+    transition: color 0.3s ease, padding 0.3s ease;
+  }
+
+  .st__num {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+  }
+
+  .st__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.85rem);
+    line-height: 1.2;
+  }
+
+  .st__list :global(.st__arrow) {
+    width: 1.1rem;
+    height: 1.1rem;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    color: var(--accent);
+  }
+
+  .st__list button:hover,
+  .st__list button[aria-selected='true'] {
+    color: var(--ink);
+  }
+
+  .st__list button[aria-selected='true'] {
+    padding-left: 0.5rem;
+    border-bottom-color: var(--accent);
+  }
+
+  .st__list button[aria-selected='true'] .st__num {
+    color: var(--eyebrow);
+  }
+
+  .st__list button[aria-selected='true'] .st__name {
+    font-style: italic;
+  }
+
+  .st__list button[aria-selected='true'] :global(.st__arrow) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .st__panel {
+    display: grid;
+    gap: 2rem;
+    animation: st-in 0.6s ease;
+  }
+
+  @keyframes st-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .st__media {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+
+  .st__media .vertical-label {
+    color: var(--ink-soft);
+  }
+
+  .st__body {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    padding-left: 2.2rem;
+  }
+
+  .st__short {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.3rem;
+    line-height: 1.4;
+  }
+
+  .st__desc {
+    color: var(--ink-soft);
+    max-width: 34rem;
+  }
+
+  .st__durations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .st__durations b {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin-left: 0.35rem;
+  }
+
+  @media (min-width: 900px) {
+    .st__grid {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: start;
+    }
+
+    .st__panel {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: end;
+    }
+
+    .st__body {
+      padding-left: 0;
+      padding-bottom: 0.5rem;
+    }
+  }
+</style>

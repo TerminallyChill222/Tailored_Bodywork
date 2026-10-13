@@ -1,0 +1,471 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import BleedImage from '../../components/clay/BleedImage.astro';
+import CtaImage from '../../components/clay/CtaImage.astro';
+import { site } from '../../data/site';
+import { intro, story, credentials, values, personal } from '../../data/about';
+import { practitioner, images, scenes } from '../../data/images';
+import { rich, vurl, pad } from '../../lib/utils';
+---
+
+<Layout
+  version="clay"
+  title={`About ${site.practitioner.firstName}`}
+  description={`Meet ${site.practitioner.firstName}, the practitioner behind Tailored Bodywork — personalized, professional in-home bodywork in ${site.city}.`}
+>
+  <!-- Hero: oversized name, portrait overlapping (after the "Meet Aurora" inspo) -->
+  <section class="section--stone meet-hero" aria-labelledby="about-title">
+    <div class="container meet-hero__inner">
+      <h1 id="about-title" class="meet-hero__title" data-reveal>
+        Meet {site.practitioner.firstName}
+      </h1>
+      <div class="meet-hero__grid">
+        <div class="meet-hero__aside" data-reveal style="--reveal-delay:.1s">
+          <Photo src={images.terracotta.src} alt="" shape="rect" aspect="3 / 4" stock={false} sizes="200px" />
+        </div>
+        <div class="meet-hero__portrait" data-reveal style="--reveal-delay:.05s">
+          <Photo src={practitioner.headshot.src} alt={practitioner.headshot.alt} label={practitioner.headshot.label} shape="rect" aspect="4 / 5" stock={false} eager sizes="(min-width: 900px) 30vw, 80vw" />
+        </div>
+        <div class="meet-hero__text" data-reveal style="--reveal-delay:.15s">
+          <p class="index">( About )</p>
+          <p class="meet-hero__lede">I’m the person who’ll arrive at your door — here’s a little about my background, how I work, and why I bring bodywork home.</p>
+          <ul role="list" class="meet-hero__facts">
+            {intro.highlights.map((h) => <li set:html={rich(h)} />)}
+          </ul>
+          <a class="btn btn--ghost-light" href="#story">Read my story</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story: editorial chapters -->
+  <section class="section story" id="story" aria-label="My story">
+    <div class="container story__grid">
+      <div class="story__rail" aria-hidden="true">
+        <span class="vertical-label">My story</span>
+      </div>
+      <div class="story__chapters">
+        {
+          story.map((block, i) => (
+            <article class="chapter" data-reveal>
+              <p class="index">( {pad(i + 1)} )</p>
+              <h2 class="h3 sc">{block.title}</h2>
+              <div class:list={['prose', { 'chapter--drop': i === 0 }]}>
+                {block.body.map((p) => <p set:html={rich(p)} />)}
+              </div>
+              {i === 0 && (
+                <div class="chapter__photo">
+                  <Photo src={practitioner.atWork.src} alt={practitioner.atWork.alt} label={practitioner.atWork.label} shape="rect" aspect="16 / 9" stock={false} sizes="(min-width: 900px) 55vw, 100vw" />
+                </div>
+              )}
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy quote -->
+  <section class="section section--band quote" aria-label="Philosophy">
+    <div class="container container--narrow quote__inner" data-reveal>
+      <p class="quote__text">Tailored, not templated. Every session is built around the person on the table — <em>never the other way around</em>.</p>
+      <p class="quote__by">— {site.practitioner.firstName} <span class="draft-tag">Suggested wording</span></p>
+    </div>
+  </section>
+
+  <!-- Values: three overlapping circles over a photo -->
+  <section class="bleed circles" aria-labelledby="values-title">
+    <BleedImage src={images.leafShadow.src} />
+    <div class="container circles__inner">
+      <p class="eyebrow" data-reveal>What you can count on</p>
+      <h2 id="values-title" class="visually-hidden">What you can count on</h2>
+      <ul role="list" class="circles__row">
+        {
+          values.map((v, i) => (
+            <li class="circle" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+              <h3 class="circle__title">{v.title}</h3>
+              <p>{v.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Credentials: menu-style list -->
+  <section class="section creds" aria-labelledby="creds-title">
+    <div class="container container--narrow">
+      <div class="creds__head" data-reveal>
+        <p class="index">( Credentials )</p>
+        <h2 id="creds-title">Training & <em>credentials</em></h2>
+        <p class="prose">You should know exactly who’s coming into your home. You’re always welcome to ask about my training or experience before booking.</p>
+        <p><span class="draft-tag">To confirm — all credential details</span></p>
+      </div>
+      <dl class="creds__list" data-reveal>
+        {
+          credentials.map((c) => (
+            <div>
+              <dt>{c.label}</dt>
+              <span class="creds__leader" aria-hidden="true" />
+              <dd set:html={rich(c.value)} />
+            </div>
+          ))
+        }
+      </dl>
+      <p class="creds__verify" data-reveal>
+        Colorado massage licenses can be looked up through the{' '}
+        <a href="https://dpo.colorado.gov/" rel="noopener" target="_blank">Colorado Division of Professions and Occupations</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- Personal: edge-to-edge split -->
+  <section class="split" aria-labelledby="personal-title">
+    <div class="split__media">
+      <Photo src={practitioner.casual.src} alt={practitioner.casual.alt} label={practitioner.casual.label} shape="rect" aspect="auto" stock={false} sizes="(min-width: 900px) 50vw, 100vw" />
+    </div>
+    <div class="split__text" data-reveal>
+      <p class="index">( Outside the session )</p>
+      <h2 id="personal-title">A little more <em>about me</em></h2>
+      <p class="prose" set:html={rich(personal)} />
+      <div class="btn-row">
+        <a class="btn btn--primary" href={vurl('clay', 'experience')}>What a session looks like</a>
+        <a class="btn btn--ghost" href={vurl('clay', 'contact')}>Say hello</a>
+      </div>
+    </div>
+  </section>
+
+  <CtaImage title="Ready when *you* are" image={scenes.clay.corner.src} />
+</Layout>
+
+<style>
+  /* Hero */
+  .meet-hero {
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem) clamp(4rem, 3rem + 4vw, 6.5rem);
+    overflow: hidden;
+  }
+
+  .meet-hero__title {
+    font-size: clamp(3.6rem, 1rem + 13vw, 13rem) !important;
+    line-height: 0.9 !important;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: 0.01em !important;
+  }
+
+  .meet-hero__grid {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: -0.5rem;
+  }
+
+  .meet-hero__portrait {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 26rem);
+    justify-self: center;
+  }
+
+  .meet-hero__aside {
+    display: none;
+  }
+
+  .meet-hero__text {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    align-content: end;
+  }
+
+  .meet-hero .index {
+    color: var(--stone-accent);
+  }
+
+  .meet-hero__lede {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .meet-hero__facts {
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .meet-hero__facts li {
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--stone-soft) 30%, transparent);
+  }
+
+  @media (min-width: 900px) {
+    .meet-hero__grid {
+      grid-template-columns: 1fr 1.3fr 1fr;
+      align-items: end;
+      gap: clamp(2rem, 4vw, 4rem);
+      margin-top: clamp(-5rem, -4vw, -2rem);
+    }
+
+    .meet-hero__aside {
+      display: block;
+      width: 62%;
+      align-self: center;
+    }
+  }
+
+  /* Story */
+  .story__grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .story__rail {
+    display: none;
+  }
+
+  .story__chapters {
+    display: grid;
+    gap: clamp(3.5rem, 3rem + 3vw, 6rem);
+    max-width: 46rem;
+  }
+
+  .chapter {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .chapter--drop > p:first-child::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 4.6rem;
+    line-height: 0.85;
+    padding: 0.3rem 0.6rem 0 0;
+    color: var(--accent);
+  }
+
+  .chapter__photo {
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .story__grid {
+      grid-template-columns: 8rem 1fr;
+      gap: 4rem;
+    }
+
+    .story__rail {
+      display: flex;
+      justify-content: center;
+      align-self: stretch;
+      border-right: 1px solid var(--line);
+    }
+
+    .story__rail .vertical-label {
+      position: sticky;
+      top: 9rem;
+      align-self: start;
+      color: var(--eyebrow);
+    }
+  }
+
+  /* Quote */
+  .quote__inner {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .quote__text {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3.1rem);
+    line-height: 1.2;
+    color: var(--band-ink);
+    text-wrap: balance;
+  }
+
+  .quote__text em {
+    color: var(--accent-soft);
+  }
+
+  .quote__by {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--band-soft);
+  }
+
+  /* Circles */
+  .circles {
+    padding-block: clamp(5rem, 4rem + 4vw, 8rem);
+  }
+
+  .circles::after {
+    background: rgb(36 34 32 / 0.68);
+  }
+
+  .circles__inner {
+    display: grid;
+    justify-items: center;
+    gap: 3rem;
+  }
+
+  .circles__row {
+    display: grid;
+    justify-items: center;
+  }
+
+  .circle {
+    display: grid;
+    place-content: center;
+    gap: 0.75rem;
+    width: min(19rem, 80vw);
+    aspect-ratio: 1;
+    padding: 2.5rem;
+    border: 1px solid color-mix(in srgb, var(--band-ink) 55%, transparent);
+    border-radius: 50%;
+    text-align: center;
+  }
+
+  .circle + .circle {
+    margin-top: -2.5rem;
+  }
+
+  .circle__title {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--band-ink);
+  }
+
+  .circle p {
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--band-ink) 85%, transparent);
+  }
+
+  @media (min-width: 900px) {
+    .circles__row {
+      grid-template-columns: repeat(3, auto);
+      justify-content: center;
+    }
+
+    .circle + .circle {
+      margin-top: 0;
+      margin-left: -2.5rem;
+    }
+  }
+
+  /* Credentials */
+  .creds__head {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: center;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .creds__head .prose {
+    margin-inline: auto;
+  }
+
+  .creds__list {
+    margin: 0;
+  }
+
+  .creds__list div {
+    display: grid;
+    gap: 0.35rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .creds__list dt {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .creds__list dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.35;
+  }
+
+  .creds__leader {
+    display: none;
+  }
+
+  .creds__verify {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+
+  .creds__verify a {
+    color: var(--accent);
+  }
+
+  @media (min-width: 760px) {
+    .creds__list div {
+      grid-template-columns: auto 1fr auto;
+      align-items: baseline;
+      gap: 1rem;
+      border-bottom: 0;
+      padding-block: 0.9rem;
+    }
+
+    .creds__leader {
+      display: block;
+      border-bottom: 1px dotted var(--line-strong);
+      transform: translateY(-0.3rem);
+    }
+
+    .creds__list dd {
+      text-align: right;
+      max-width: 26rem;
+    }
+  }
+
+  /* Split */
+  .split {
+    display: grid;
+    background: var(--accent-wash);
+  }
+
+  .split__media :global(.photo__frame) {
+    aspect-ratio: 4 / 3;
+    height: 100%;
+  }
+
+  .split__text {
+    display: grid;
+    gap: 1.25rem;
+    align-content: center;
+    justify-items: start;
+    padding: clamp(3rem, 2rem + 5vw, 7rem) clamp(1.25rem, 5vw, 6rem);
+  }
+
+  @media (min-width: 900px) {
+    .split {
+      grid-template-columns: 1fr 1fr;
+      min-height: 36rem;
+    }
+
+    .split__media :global(.photo__frame) {
+      aspect-ratio: auto;
+    }
+
+    .split__media :global(.photo) {
+      height: 100%;
+    }
+  }
+</style>

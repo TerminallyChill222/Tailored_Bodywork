@@ -1,0 +1,362 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../data/site';
+import { intro, story, credentials, values, personal } from '../data/about';
+import { practitioner, images } from '../data/images';
+import { rich, url } from '../lib/utils';
+---
+
+<Layout
+  title={`About ${site.practitioner.firstName}`}
+  description={`Meet ${site.practitioner.firstName}, the practitioner behind Tailored Bodywork — personalized, professional in-home bodywork in ${site.city}.`}
+>
+  <PageHeader
+    eyebrow="About"
+    title={`Hi, I’m *${site.practitioner.firstName}*.`}
+    lede="I’m the person who’ll arrive at your door. Here’s a little about my background, how I work, and why I bring bodywork to people’s homes."
+    image={practitioner.headshot}
+    stock={false}
+  >
+    <ul role="list" class="chips">
+      {intro.highlights.map((h) => <li class="chip" set:html={rich(h)} />)}
+    </ul>
+  </PageHeader>
+
+  <!-- Story -->
+  <section class="section section--alt" aria-label="My story">
+    <div class="container story">
+      <div class="story__media" data-reveal>
+        <Photo
+          src={practitioner.atWork.src}
+          alt={practitioner.atWork.alt}
+          label={practitioner.atWork.label}
+          aspect="3 / 4"
+          stock={false}
+          sizes="(min-width: 900px) 35vw, 100vw"
+        />
+      </div>
+      <div class="story__text">
+        {
+          story.map((block, i) => (
+            <article class="story__block" data-reveal style={`--reveal-delay: ${i * 0.05}s`}>
+              <p class="eyebrow">{String(i + 1).padStart(2, '0')}</p>
+              <h2 class="h3">{block.title}</h2>
+              <div class="prose">
+                {block.body.map((p) => <p set:html={rich(p)} />)}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy quote -->
+  <section class="section section--tight philosophy" aria-label="Philosophy">
+    <div class="container container--narrow">
+      <figure class="philosophy__quote" data-reveal>
+        <svg class="philosophy__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M12.5 27.5c0-9 5.6-14.6 15-15 .4 9.3-5.4 15-15 15Z" />
+          <path d="M12.5 27.5c3.4-3.9 6.9-7.4 11-10.4" stroke-dasharray="1.6 2.2" />
+        </svg>
+        <blockquote>
+          <p>Tailored, not templated. Every session is built around the person on the table — <em>never the other way around</em>.</p>
+        </blockquote>
+        <figcaption>— {site.practitioner.firstName} <span class="draft-tag">Suggested wording</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="section section--wash" aria-labelledby="values-title">
+    <div class="container">
+      <SectionHead eyebrow="What you can count on" title="How every session *feels*" align="center" id="values-title" />
+      <ul role="list" class="values">
+        {
+          values.map((v, i) => (
+            <li class="card values__item" data-reveal style={`--reveal-delay: ${i * 0.1}s`}>
+              <span class="values__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="h4">{v.title}</h3>
+              <p>{v.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Credentials -->
+  <section class="section" aria-labelledby="credentials-title">
+    <div class="container credentials">
+      <div class="credentials__intro" data-reveal>
+        <p class="eyebrow">Training & credentials</p>
+        <h2 id="credentials-title">Qualified, insured, and <em>accountable</em></h2>
+        <p class="prose">
+          You should know exactly who’s coming into your home. Here are my qualifications — and you’re always welcome to
+          ask about my training or experience before booking.
+        </p>
+        <p class="small credentials__verify">
+          <Icon name="shield" />
+          <span>
+            Colorado massage licenses can be looked up through the{' '}
+            <a href="https://dpo.colorado.gov/" rel="noopener" target="_blank">Colorado Division of Professions and Occupations</a>.
+          </span>
+        </p>
+        <p><span class="draft-tag">To confirm — all credential details</span></p>
+      </div>
+      <dl class="credentials__list" data-reveal style="--reveal-delay: .1s">
+        {
+          credentials.map((c) => (
+            <div>
+              <dt>{c.label}</dt>
+              <dd set:html={rich(c.value)} />
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Personal -->
+  <section class="section section--alt" aria-labelledby="personal-title">
+    <div class="container personal">
+      <div class="personal__media" data-reveal>
+        <Photo src={practitioner.casual.src} alt={practitioner.casual.alt} label={practitioner.casual.label} shape="feature" aspect="4 / 5" stock={false} sizes="(min-width: 900px) 30vw, 100vw" />
+      </div>
+      <div class="personal__text" data-reveal style="--reveal-delay: .1s">
+        <p class="eyebrow">Outside the session</p>
+        <h2 id="personal-title">A little more <em>about me</em></h2>
+        <p class="prose" set:html={rich(personal)} />
+        <div class="btn-row">
+          <a class="btn btn--primary" href={url('experience')}>What a session looks like</a>
+          <a class="btn btn--ghost" href={url('contact')}>Say hello</a>
+        </div>
+      </div>
+      <div class="personal__accent" data-reveal style="--reveal-delay: .2s">
+        <Photo src={images.eucalyptus.src} alt="" aspect="1 / 1" shape="circle" sizes="220px" stock={false} />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Ready when *you* are." />
+</Layout>
+
+<style>
+  /* Story */
+  .story {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .story__media {
+    max-width: 28rem;
+  }
+
+  .story__text {
+    display: grid;
+    gap: clamp(3rem, 2rem + 3vw, 4.5rem);
+  }
+
+  .story__block {
+    display: grid;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1.5px dashed var(--line-strong);
+  }
+
+  .story__block:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  @media (min-width: 900px) {
+    .story {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: clamp(3rem, 7vw, 7rem);
+      align-items: start;
+    }
+
+    .story__media {
+      position: sticky;
+      top: 7rem;
+    }
+  }
+
+  /* Philosophy */
+  .philosophy__quote {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .philosophy__mark {
+    width: 3rem;
+    height: 3rem;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+  }
+
+  .philosophy blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-weight: var(--display-weight);
+    font-size: calc(clamp(1.7rem, 1.2rem + 2vw, 2.6rem) * var(--display-scale));
+    line-height: 1.3;
+    letter-spacing: var(--display-tracking);
+    text-wrap: balance;
+  }
+
+  .philosophy blockquote em {
+    color: var(--emphasis);
+  }
+
+  .philosophy figcaption {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  /* Values */
+  .values {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .values__item {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+
+  .values__item p {
+    color: var(--ink-soft);
+  }
+
+  .values__num {
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-style: italic;
+    font-size: calc(1.4rem * var(--display-scale));
+    color: var(--emphasis);
+  }
+
+  @media (min-width: 820px) {
+    .values {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Credentials */
+  .credentials {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .credentials__intro {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .credentials__verify {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    color: var(--ink-soft);
+    max-width: 28rem;
+  }
+
+  .credentials__verify a {
+    color: var(--accent);
+  }
+
+  .credentials__verify :global(.icon) {
+    color: var(--accent);
+    margin-top: 0.1rem;
+  }
+
+  .credentials__list {
+    margin: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .credentials__list div {
+    display: grid;
+    gap: 0.35rem;
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .credentials__list dt {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+
+  .credentials__list dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-variation-settings: var(--display-variation);
+    font-size: calc(1.25rem * var(--display-scale));
+    line-height: 1.4;
+  }
+
+  @media (min-width: 900px) {
+    .credentials {
+      grid-template-columns: 1fr 1.1fr;
+      gap: clamp(3rem, 7vw, 7rem);
+    }
+
+    .credentials__list div {
+      grid-template-columns: 11rem 1fr;
+      gap: 1.5rem;
+      align-items: baseline;
+    }
+  }
+
+  /* Personal */
+  .personal {
+    position: relative;
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .personal__media {
+    max-width: 26rem;
+  }
+
+  .personal__text {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+
+  .personal__accent {
+    display: none;
+  }
+
+  @media (min-width: 1000px) {
+    .personal {
+      grid-template-columns: 0.8fr 1fr 0.45fr;
+      gap: clamp(3rem, 6vw, 5rem);
+    }
+
+    .personal__accent {
+      display: block;
+      align-self: end;
+    }
+  }
+</style>
