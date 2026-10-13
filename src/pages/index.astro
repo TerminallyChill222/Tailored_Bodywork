@@ -47,7 +47,7 @@ const benefits = [
 const details = [
   { caption: 'Fresh linens, every visit', ...scenes.sage.towel },
   { caption: 'Thoughtful details', ...images.supplies },
-  { caption: 'Quiet, unhurried care', ...scenes.sage.oliveVase },
+  { caption: 'Quiet, unhurried care', ...scenes.sage.benchDetail, position: '42% center' },
   { caption: 'Your space, prepared', ...scenes.sage.corner },
 ];
 
@@ -101,7 +101,7 @@ const assurances = [
           outline="right"
         />
         <div class="hero__print">
-          <Photo src={scenes.sage.consoleDetail.src} alt={scenes.sage.consoleDetail.alt} aspect="1 / 1" position="30% 60%" sizes="220px" />
+          <ArchFrame src={scenes.sage.consoleDetail.src} alt={scenes.sage.consoleDetail.alt} aspect="3 / 4" position="28% 60%" sizes="240px" outline="left" />
         </div>
         <div class="hero__float" aria-hidden="true">
           <span class="icon-badge"><Icon name="check" /></span>
@@ -160,7 +160,7 @@ const assurances = [
         {
           details.map((d, i) => (
             <li class="details__item" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
-              <Photo src={d.src} alt={d.alt} shape="feature" aspect="3 / 4.2" sizes="(min-width: 900px) 22vw, 45vw" />
+              <Photo src={d.src} alt={d.alt} shape="feature" aspect="3 / 4.2" position={d.position} sizes="(min-width: 900px) 22vw, 45vw" />
               <p class="details__caption">{d.caption}</p>
             </li>
           ))
@@ -240,7 +240,7 @@ const assurances = [
       <div class="experience-teaser__media" data-reveal>
         <Photo src={scenes.sage.oliveLinens.src} alt={scenes.sage.oliveLinens.alt} position="86% center" aspect="5 / 6" sizes="(min-width: 900px) 45vw, 100vw" />
         <div class="experience-teaser__inset">
-          <Photo src={scenes.sage.benchDetail.src} alt={scenes.sage.benchDetail.alt} position="45% 40%" aspect="1 / 1" sizes="200px" shape="circle" />
+          <Photo src={scenes.sage.towelDetail.src} alt={scenes.sage.towelDetail.alt} position="35% 40%" aspect="1 / 1" sizes="200px" shape="circle" />
         </div>
       </div>
       <div class="experience-teaser__text" data-reveal style="--reveal-delay: .12s">
@@ -377,22 +377,17 @@ const assurances = [
     justify-self: center;
   }
 
-  /* a smaller photo layered over the arch's corner, like a print */
+  /* a small matching arch tucked against the main arch's corner */
   .hero__print {
     position: absolute;
     z-index: 3;
-    left: -12%;
+    left: -9%;
     bottom: -2rem;
-    width: 38%;
-    padding: 0.5rem;
-    background: var(--surface);
-    border-radius: calc(var(--radius) * 0.6);
-    box-shadow: 0 1px 2px rgb(40 40 30 / 0.06), 0 22px 40px -18px rgb(40 40 30 / 0.35);
-    transform: rotate(-3deg);
+    width: 30%;
   }
 
-  .hero__print :global(.photo__frame) {
-    border-radius: calc(var(--radius) * 0.4);
+  .hero__print :global(.arch-frame) {
+    --offset: 7px;
   }
 
   .hero__float {
@@ -463,10 +458,7 @@ const assurances = [
     }
 
     .hero__print {
-      left: -0.5rem;
-      bottom: -1.5rem;
-      width: 30%;
-      max-width: 9rem;
+      display: none;
     }
 
     .hero__float {
