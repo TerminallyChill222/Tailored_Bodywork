@@ -20,18 +20,21 @@ export const scenes = {
     corner: { src: '/images/corner-sage-1600.jpg', alt: 'A linen-draped massage table beside a wooden bench with a vase of olive branches' },
     oliveLinens: { src: '/images/olive-linens-sage-1600.jpg', alt: 'A massage table with cream and olive linens in a sunlit room' },
     towel: { src: '/images/towel-sage-1600.jpg', alt: 'A rolled towel resting on a linen-covered massage table in morning light' },
+    towelDetail: { src: '/images/towel-detail-sage-1600.jpg', alt: 'A freshly rolled towel on a linen-covered massage table' },
+    linenFold: { src: '/images/linen-fold-sage-1600.jpg', alt: 'Cream and olive linens layered over a massage table' },
   },
   clay: {
     room: { src: '/images/room-clay-1600.jpg', alt: 'A massage table dressed in soft linen in a warm, sunlit room' },
     corner: { src: '/images/corner-clay-1600.jpg', alt: 'A linen-draped massage table beside a wooden bench in golden light' },
     towel: { src: '/images/towel-clay-1600.jpg', alt: 'A rolled towel resting on a linen-covered massage table in warm light' },
+    towelDetail: { src: '/images/towel-detail-clay-1600.jpg', alt: 'A freshly rolled towel on a linen-covered massage table in warm light' },
+    towelStrip: { src: '/images/towel-strip-clay-1600.jpg', alt: 'A rolled towel on fresh linens beside a sunlit curtain' },
     session: { src: '/images/session-clay-1600.jpg', alt: 'A client resting face-down under a linen sheet while her upper back is massaged' },
   },
 } satisfies Record<'sage' | 'clay', Record<string, Img>>;
 
 /** Detail shots (stock placeholders). */
 export const images = {
-  linens: { src: `${U}photo-1524404794194-16bae22718c0`, alt: 'A stack of folded linens in cream and beige', credit: 'Mel Poole' },
   eucalyptus: { src: `${U}photo-1510520745063-ceaa7314a820`, alt: 'Eucalyptus branches in a ceramic vase', credit: 'Alex Lvrs' },
   terracotta: { src: `${U}photo-1738511498466-0920ad8d5092`, alt: 'Dried grasses in a terracotta vase against a warm sand wall', credit: 'Joyce G' },
   leafShadow: { src: `${U}photo-1570019177956-e959fed60484`, alt: 'Leaf shadows on a warm beige wall', credit: 'Suhyeon Choi' },

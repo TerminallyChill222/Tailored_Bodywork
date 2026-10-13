@@ -83,10 +83,11 @@ for name, fname in pairs:
     for theme, fn in grades.items():
         out = np.clip(fn(base.copy()), 0, 1)
         im = Image.fromarray((out * 255 + 0.5).astype(np.uint8))
-        for w in (800, 1600):
+        for label in (800, 1600):
+            w = min(label, im.width)  # never upscale small crops; the file name keeps the size slot
             h = round(im.height * w / im.width)
             im.resize((w, h), Image.LANCZOS).save(
-                out_dir / f'{name}-{theme}-{w}.jpg', quality=80, optimize=True, progressive=True)
+                out_dir / f'{name}-{theme}-{label}.jpg', quality=80, optimize=True, progressive=True)
         row.append(im)
     sheet_rows.append(row)
     print('graded', name)
