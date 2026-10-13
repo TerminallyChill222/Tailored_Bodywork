@@ -100,9 +100,6 @@ const assurances = [
           sizes="(min-width: 900px) 45vw, 100vw"
           outline="right"
         />
-        <div class="hero__print">
-          <ArchFrame src={scenes.sage.consoleDetail.src} alt={scenes.sage.consoleDetail.alt} aspect="3 / 4" position="28% 60%" sizes="240px" outline="left" />
-        </div>
         <div class="hero__float" aria-hidden="true">
           <span class="icon-badge"><Icon name="check" /></span>
           <span>Everything you need,<br />nothing to set up</span>
@@ -377,19 +374,6 @@ const assurances = [
     justify-self: center;
   }
 
-  /* a small matching arch tucked against the main arch's corner */
-  .hero__print {
-    position: absolute;
-    z-index: 3;
-    left: -9%;
-    bottom: -2rem;
-    width: 30%;
-  }
-
-  .hero__print :global(.arch-frame) {
-    --offset: 7px;
-  }
-
   .hero__float {
     position: absolute;
     right: -2rem;
@@ -455,10 +439,6 @@ const assurances = [
     .hero__media :global(.arch-frame .photo__frame) {
       aspect-ratio: auto;
       height: clamp(15rem, 42vh, 26rem);
-    }
-
-    .hero__print {
-      display: none;
     }
 
     .hero__float {
