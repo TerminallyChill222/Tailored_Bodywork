@@ -23,6 +23,7 @@ export const scenes = {
     towelDetail: { src: '/images/towel-detail-sage-1600.jpg', alt: 'A freshly rolled towel on a linen-covered massage table' },
     linenFold: { src: '/images/linen-fold-sage-1600.jpg', alt: 'Cream and olive linens layered over a massage table' },
     oliveVase: { src: '/images/olive-vase-sage-1600.jpg', alt: 'Olive branches in a stone vase beside a candle and an amber bottle' },
+    consoleDetail: { src: '/images/mirror-console-sage-1600.jpg', alt: 'Olive branches, a candle, and an amber oil bottle on a wooden console in soft light' },
     benchDetail: { src: '/images/bench-detail-sage-1600.jpg', alt: 'A candle, stone bowl, amber oil bottle, and folded towels on a wooden bench' },
   },
   clay: {

@@ -8,12 +8,11 @@ import Steps from '../components/Steps.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CtaBand from '../components/CtaBand.astro';
 import ArchFrame from '../components/ArchFrame.astro';
-import Sprig from '../components/Sprig.astro';
 import { site } from '../data/site';
 import { services } from '../data/services';
 import { intro } from '../data/about';
 import { images, scenes, practitioner } from '../data/images';
-import { url, rich, bookingHref } from '../lib/utils';
+import { url, rich, bookingHref, imgSrc, imgSrcset } from '../lib/utils';
 
 const trust = [
   { icon: 'table', text: 'Professional table & fresh linens' },
@@ -61,8 +60,18 @@ const assurances = [
 ---
 
 <Layout image={scenes.sage.room.src}>
-  <!-- Hero -->
+  <!-- Hero: arched photo straddling a deep olive block washed in dappled light, with paper grain -->
   <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__panel" aria-hidden="true">
+      <img
+        class="hero__light"
+        src={imgSrc(images.leafShadow.src, 1080)}
+        srcset={imgSrcset(images.leafShadow.src, [768, 1080, 1440])}
+        sizes="40vw"
+        alt=""
+        decoding="async"
+      />
+    </div>
     <div class="container hero__grid">
       <div class="hero__text" data-reveal>
         <p class="eyebrow">Mobile bodywork · {site.city}, {site.region}</p>
@@ -90,15 +99,16 @@ const assurances = [
           position="52% center"
           sizes="(min-width: 900px) 45vw, 100vw"
           outline="right"
-          sprig="left"
         />
+        <div class="hero__print">
+          <Photo src={scenes.sage.consoleDetail.src} alt={scenes.sage.consoleDetail.alt} aspect="1 / 1" position="30% 60%" sizes="220px" />
+        </div>
         <div class="hero__float" aria-hidden="true">
           <span class="icon-badge"><Icon name="table" /></span>
           <span>Everything you need,<br />nothing to set up</span>
         </div>
       </div>
     </div>
-    <Sprig kind="olive" bend={0.35} leaves={10} class="hero__sprig" />
   </section>
 
   <!-- Trust strip -->
@@ -171,7 +181,6 @@ const assurances = [
           sizes="(min-width: 900px) 40vw, 100vw"
           stock={false}
           outline="right"
-          sprig="right"
         />
       </div>
       <div class="meet__text" data-reveal style="--reveal-delay: .12s">
@@ -287,8 +296,47 @@ const assurances = [
   /* ---------- Hero ---------- */
   .hero {
     position: relative;
+    isolation: isolate;
     overflow: hidden;
     padding-block: clamp(2rem, 1rem + 4vw, 5rem) clamp(3.5rem, 2rem + 5vw, 6.5rem);
+  }
+
+  /* paper grain over the whole hero */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.25 0 0 0 0 0.24 0 0 0 0 0.2 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px;
+    opacity: 0.18;
+    mix-blend-mode: multiply;
+  }
+
+  /* deep olive block with dappled light */
+  .hero__panel {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: clamp(3rem, 8vw, 6.5rem);
+    width: 32%;
+    overflow: hidden;
+    background: var(--band);
+    border-bottom-left-radius: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .hero__light {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% center;
+    filter: grayscale(1) contrast(1.15);
+    mix-blend-mode: soft-light;
+    opacity: 0.75;
   }
 
   .hero__grid {
@@ -330,41 +378,33 @@ const assurances = [
     justify-self: center;
   }
 
-  /* Phones & tablets: photo first, as a shorter dome so the headline still shows on the first screen */
-  @media (max-width: 899px) {
-    .hero {
-      padding-top: 1rem;
-    }
+  /* a smaller photo layered over the arch's corner, like a print */
+  .hero__print {
+    position: absolute;
+    z-index: 3;
+    left: -12%;
+    bottom: -2rem;
+    width: 38%;
+    padding: 0.5rem;
+    background: var(--surface);
+    border-radius: calc(var(--radius) * 0.6);
+    box-shadow: 0 1px 2px rgb(40 40 30 / 0.06), 0 22px 40px -18px rgb(40 40 30 / 0.35);
+    transform: rotate(-3deg);
+  }
 
-    .hero__grid {
-      gap: 2rem;
-    }
-
-    .hero__media {
-      order: -1;
-      max-width: none;
-    }
-
-    .hero__media :global(.photo__frame) {
-      aspect-ratio: auto;
-      height: clamp(15rem, 42vh, 26rem);
-    }
-
-    .hero__float {
-      right: 0.75rem;
-      bottom: 1rem;
-    }
+  .hero__print :global(.photo__frame) {
+    border-radius: calc(var(--radius) * 0.4);
   }
 
   .hero__float {
     position: absolute;
-    right: -1rem;
-    bottom: 2.5rem;
+    right: -2rem;
+    top: 18%;
     display: flex;
     align-items: center;
     gap: 0.85rem;
     padding: 0.85rem 1.25rem 0.85rem 0.85rem;
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
     backdrop-filter: blur(8px);
     border: 1px solid var(--line);
     border-radius: 999px;
@@ -384,17 +424,6 @@ const assurances = [
     height: 1.35rem;
   }
 
-  .hero :global(.hero__sprig) {
-    position: absolute;
-    left: -2rem;
-    bottom: -2.5rem;
-    width: clamp(5rem, 9vw, 8rem);
-    height: auto;
-    color: var(--accent-soft);
-    transform: rotate(-16deg);
-    pointer-events: none;
-  }
-
   @media (min-width: 900px) {
     .hero__grid {
       grid-template-columns: 1.1fr 0.9fr;
@@ -404,12 +433,56 @@ const assurances = [
     .hero__media {
       justify-self: end;
     }
-
-    .hero__float {
-      right: -2.5rem;
-    }
   }
 
+  /* Phones & tablets: photo first, as a shorter dome so the headline still shows on the first screen */
+  @media (max-width: 899px) {
+    .hero {
+      padding-top: 1.5rem;
+    }
+
+    .hero__panel {
+      left: 0;
+      width: auto;
+      bottom: auto;
+      height: clamp(11rem, 30vh, 18rem);
+      border-radius: 0 0 clamp(2rem, 8vw, 3rem) clamp(2rem, 8vw, 3rem);
+    }
+
+    .hero__grid {
+      gap: 3rem;
+    }
+
+    .hero__media {
+      order: -1;
+      max-width: none;
+    }
+
+    .hero__media :global(.arch-frame .photo__frame) {
+      aspect-ratio: auto;
+      height: clamp(15rem, 42vh, 26rem);
+    }
+
+    .hero__print {
+      left: -0.5rem;
+      bottom: -1.5rem;
+      width: 30%;
+      max-width: 9rem;
+    }
+
+    .hero__float {
+      right: 0.5rem;
+      top: auto;
+      bottom: -1.25rem;
+      padding: 0.6rem 1rem 0.6rem 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .hero__float .icon-badge {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
 
   /* ---------- Trust strip ---------- */
   .trust {

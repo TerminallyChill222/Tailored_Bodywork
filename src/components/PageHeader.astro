@@ -1,7 +1,6 @@
 ---
 /** Interior page intro: eyebrow, title, lede, and an optional photo. */
 import ArchFrame from './ArchFrame.astro';
-import Sprig from './Sprig.astro';
 import { rich } from '../lib/utils';
 
 interface Props {
@@ -25,12 +24,11 @@ const { eyebrow, title, lede, image, stock } = Astro.props;
     {
       image && (
         <div class="page-header__media" data-reveal style="--reveal-delay: .15s">
-          <ArchFrame src={image.src} alt={image.alt} label={image.label} aspect="4 / 5" eager stock={stock} sizes="(min-width: 900px) 40vw, 100vw" outline="left" sprig="left" />
+          <ArchFrame src={image.src} alt={image.alt} label={image.label} aspect="4 / 5" eager stock={stock} sizes="(min-width: 900px) 40vw, 100vw" outline="left" />
         </div>
       )
     }
   </div>
-  {!image && <Sprig kind="olive" bend={0.4} leaves={10} class="page-header__sprig" />}
 </section>
 
 <style>
@@ -80,17 +78,6 @@ const { eyebrow, title, lede, image, stock } = Astro.props;
       aspect-ratio: auto;
       height: clamp(14rem, 38vh, 24rem);
     }
-  }
-
-  .page-header :global(.page-header__sprig) {
-    position: absolute;
-    right: clamp(-1rem, 2vw, 3rem);
-    top: 2rem;
-    width: clamp(5rem, 9vw, 8rem);
-    height: auto;
-    color: var(--accent-soft);
-    transform: rotate(10deg);
-    pointer-events: none;
   }
 
   @media (min-width: 900px) {
