@@ -6,8 +6,7 @@
  * Shapes: plain (theme radius) · feature (arch) · circle · capsule (tall oval) · rect (square corners)
  */
 import Icon from './Icon.astro';
-import { site } from '../data/site';
-import { imgSrc, imgSrcset, isStock } from '../lib/utils';
+import { imgSrc, imgSrcset } from '../lib/utils';
 
 interface Props {
   src?: string;
@@ -19,8 +18,6 @@ interface Props {
   eager?: boolean;
   position?: string;
   class?: string;
-  /** Stock image standing in for real photography. Adds a small "Placeholder" tag in draft mode. Defaults to true for hotlinked stock photos. */
-  stock?: boolean;
 }
 
 const {
@@ -33,7 +30,6 @@ const {
   eager = false,
   position = 'center',
   class: className = '',
-  stock = isStock(Astro.props.src),
 } = Astro.props;
 ---
 
@@ -60,7 +56,6 @@ const {
         </div>
       )
     }
-    {src && stock && site.flags.draft && <span class="photo__tag draft-only">Placeholder photo</span>}
   </div>
 </figure>
 
@@ -137,27 +132,4 @@ const {
     opacity: 0.8;
   }
 
-  .photo__tag {
-    position: absolute;
-    right: 0.75rem;
-    top: 0.75rem;
-    z-index: 2;
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.55rem;
-    border-radius: 999px;
-    background: rgb(255 255 255 / 0.78);
-    color: #3b3b33;
-    white-space: nowrap;
-    backdrop-filter: blur(4px);
-  }
-
-  .photo--feature .photo__tag,
-  .photo--capsule .photo__tag {
-    right: 50%;
-    top: 1.5rem;
-    transform: translateX(50%);
-  }
 </style>

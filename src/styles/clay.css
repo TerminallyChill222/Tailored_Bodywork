@@ -177,18 +177,6 @@
   color: var(--band-ink);
 }
 
-.bleed__tag {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.78);
-  color: #3b3b33;
-}
 
 /* Editorial underline-only form fields */
 .field--line :is(input, select, textarea) {

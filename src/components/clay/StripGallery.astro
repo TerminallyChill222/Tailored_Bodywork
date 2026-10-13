@@ -13,7 +13,7 @@ const { items } = Astro.props;
     items.map((item, i) => (
       <li class="strip" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
         <span class="vertical-label">{item.label}</span>
-        <Photo src={item.src} alt={item.alt ?? ''} aspect="1 / 2.6" shape="rect" stock={false} sizes="(min-width: 900px) 20vw, 45vw" />
+        <Photo src={item.src} alt={item.alt ?? ''} aspect="1 / 2.6" shape="rect" sizes="(min-width: 900px) 20vw, 45vw" />
       </li>
     ))
   }

@@ -1,7 +1,6 @@
 ---
 /** Background photo for a full-bleed `.bleed` section. */
-import { site } from '../../data/site';
-import { imgSrc, imgSrcset, isStock } from '../../lib/utils';
+import { imgSrc, imgSrcset } from '../../lib/utils';
 
 interface Props {
   src: string;
@@ -25,4 +24,3 @@ const { src, alt = '', eager = false, position = 'center' } = Astro.props;
   decoding="async"
   style={`object-position: ${position}`}
 />
-{site.flags.draft && isStock(src) && <span class="bleed__tag draft-only">Placeholder photo</span>}

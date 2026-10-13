@@ -21,7 +21,6 @@ import { rich, url } from '../lib/utils';
     title={`Hi, I’m *${site.practitioner.firstName}*.`}
     lede="I’m the person who’ll arrive at your door. Here’s a little about my background, how I work, and why I bring bodywork to people’s homes."
     image={practitioner.headshot}
-    stock={false}
   >
     <ul role="list" class="chips">
       {intro.highlights.map((h) => <li class="chip" set:html={rich(h)} />)}
@@ -37,7 +36,6 @@ import { rich, url } from '../lib/utils';
           alt={practitioner.atWork.alt}
           label={practitioner.atWork.label}
           aspect="3 / 4"
-          stock={false}
           sizes="(min-width: 900px) 35vw, 100vw"
         />
       </div>
@@ -127,7 +125,7 @@ import { rich, url } from '../lib/utils';
   <section class="section section--alt" aria-labelledby="personal-title">
     <div class="container personal">
       <div class="personal__media" data-reveal>
-        <ArchFrame src={practitioner.casual.src} alt={practitioner.casual.alt} label={practitioner.casual.label} aspect="4 / 5" stock={false} sizes="(min-width: 900px) 30vw, 100vw" outline="left" />
+        <ArchFrame src={practitioner.casual.src} alt={practitioner.casual.alt} label={practitioner.casual.label} aspect="4 / 5" sizes="(min-width: 900px) 30vw, 100vw" outline="left" />
       </div>
       <div class="personal__text" data-reveal style="--reveal-delay: .1s">
         <p class="eyebrow">Outside the session</p>
@@ -139,7 +137,7 @@ import { rich, url } from '../lib/utils';
         </div>
       </div>
       <div class="personal__accent" data-reveal style="--reveal-delay: .2s">
-        <Photo src={images.eucalyptus.src} alt="" aspect="1 / 1" shape="circle" sizes="220px" stock={false} />
+        <Photo src={images.eucalyptus.src} alt="" aspect="1 / 1" shape="circle" sizes="220px" />
       </div>
     </div>
   </section>

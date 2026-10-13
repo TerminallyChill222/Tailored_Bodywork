@@ -8,9 +8,8 @@ interface Props {
   title: string;
   lede?: string;
   image?: { src: string; alt: string; label?: string };
-  stock?: boolean;
 }
-const { eyebrow, title, lede, image, stock } = Astro.props;
+const { eyebrow, title, lede, image } = Astro.props;
 ---
 
 <section class:list={['page-header', { 'page-header--image': image }]}>
@@ -24,7 +23,7 @@ const { eyebrow, title, lede, image, stock } = Astro.props;
     {
       image && (
         <div class="page-header__media" data-reveal style="--reveal-delay: .15s">
-          <ArchFrame src={image.src} alt={image.alt} label={image.label} aspect="4 / 5" eager stock={stock} sizes="(min-width: 900px) 40vw, 100vw" outline="left" />
+          <ArchFrame src={image.src} alt={image.alt} label={image.label} aspect="4 / 5" eager sizes="(min-width: 900px) 40vw, 100vw" outline="left" />
         </div>
       )
     }

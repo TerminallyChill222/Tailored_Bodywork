@@ -3,7 +3,7 @@
  *
  * Room and table scenes are the site's own photos in /public/images, color-graded into a Sage and a
  * Clay version (see tools/grade-photos.py). Detail shots are free Unsplash placeholders, hotlinked
- * under the Unsplash License — they show a small "Placeholder photo" tag while the site is in draft.
+ * under the Unsplash License — swap them for Torey's own photos when he has them.
  *
  * To swap a photo: drop the file in /public/images and point `src` at '/images/your-file.jpg'.
  * Practitioner photos are intentionally left empty so the site never implies a stock model is Torey.

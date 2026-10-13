@@ -67,9 +67,6 @@ export function imgSrcset(src: string, widths = [480, 768, 1080, 1440, 1920]): s
   return undefined;
 }
 
-/** True for stock placeholder photos (hotlinked), false for the site's own photos. */
-export const isStock = (src?: string) => Boolean(src?.startsWith('http'));
-
 const escapeHtml = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 

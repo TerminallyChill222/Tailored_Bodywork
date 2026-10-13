@@ -64,7 +64,7 @@ grep -rn "\[\[" src/data src/pages src/components
 All photos are listed in `src/data/images.ts`:
 
 - **Room and table scenes** are the site's own photos in `public/images/`. Each one has a Sage version and a Clay version (`room-sage-1600.jpg`, `room-clay-1600.jpg`, and so on), plus an 800px copy for phones.
-- **Detail shots** (oil bottle, linens, eucalyptus, terracotta vase, Denver) are free Unsplash placeholders. While the site is a draft, they show a small "Placeholder photo" tag.
+- **Detail shots** (oil bottle, mug, eucalyptus, terracotta vase, leaf shadows, Denver) are free Unsplash photos, hotlinked under the Unsplash License. Swap them for Torey's own photos whenever he has them.
 
 To add a new photo in both color treatments:
 
